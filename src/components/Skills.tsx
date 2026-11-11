@@ -42,12 +42,12 @@ export function Skills() {
           {t(translations.sections.technicalSkills)}
         </motion.h2>
 
-        {/* Radar Chart */}
+        {/* Evidence-based project focus map */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="mx-auto mb-8 max-w-md"
+          className="mx-auto mb-8 max-w-4xl"
         >
           <SkillRadarChart />
         </motion.div>
