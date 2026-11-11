@@ -10,10 +10,10 @@ export const translations = {
     contact: { en: "Contact", fa: "تماس" },
   },
   hero: {
-    badge: { en: "// SENIOR BACKEND ENGINEER", fa: "// مهندس ارشد بک‌اند" },
+    badge: { en: "// BACKEND & AUTOMATION", fa: "// بک‌اند و اتوماسیون" },
     subtitle: {
-      en: "Senior Python Backend Engineer — High-Performance Distributed Systems & AI/ML Infrastructure",
-      fa: "مهندس ارشد بک‌اند پایتون — سیستم‌های توزیع‌شده با کارایی بالا و زیرساخت هوش مصنوعی",
+      en: "Python backend, developer automation and systems tooling. Building useful software at the intersection of engineering and learning.",
+      fa: "توسعه بک‌اند پایتون، اتوماسیون و ابزارهای سیستمی، با علاقه به پیوند مهندسی نرم‌افزار و یادگیری.",
     },
     downloadCv: { en: "Download CV", fa: "دانلود رزومه" },
     scroll: { en: "Scroll", fa: "اسکرول" },
@@ -30,10 +30,10 @@ export const translations = {
     scanning: { en: "Scanning network...", fa: "اسکن شبکه..." },
   },
   contact: {
-    available: { en: "● Available for Remote / Relocation", fa: "● آماده کار ریموت / مهاجرت" },
+    available: { en: "● Open to collaboration", fa: "● آماده همکاری و گفت‌وگوی فنی" },
     languages: {
-      en: "Persian (Native) · English (Professional)",
-      fa: "فارسی (بومی) · انگلیسی (حرفه‌ای)",
+      en: "Persian (Native) · English (Technical)",
+      fa: "فارسی (زبان مادری) · انگلیسی فنی",
     },
     copyright: {
       en: (y: number) => `© ${y} Ali Khalili. Built with React & Tailwind.`,
@@ -45,11 +45,9 @@ export const translations = {
     systemArchitecture: { en: "System Architecture", fa: "معماری سیستم" },
   },
   achievements: {
-    "Users Served": { en: "Users Served", fa: "کاربران" },
-    "Requests/Second": { en: "Requests/Second", fa: "درخواست/ثانیه" },
-    "Avg Response": { en: "Avg Response", fa: "میانگین پاسخ" },
-    "System Uptime": { en: "System Uptime", fa: "آپتایم سیستم" },
-    "Setup Reduction": { en: "Setup Reduction", fa: "کاهش نصب" },
-    "Production Systems": { en: "Production Systems", fa: "سیستم‌های تولیدی" },
-  } as Record<string, { en: string; fa: string }>,
+    "Public Repositories": { en: "Public Repos", fa: "مخزن عمومی" },
+    "Supported OS Targets": { en: "OS Targets", fa: "سیستم‌عامل" },
+    "Chemistry Elements": { en: "Elements", fa: "عنصر شیمیایی" },
+    "Featured Projects": { en: "Featured Projects", fa: "پروژه منتخب" },
+    } as Record<string, { en: string; fa: string }>,
 } as const;

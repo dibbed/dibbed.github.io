@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Github, ExternalLink } from "lucide-react";
 import { projects } from "@/data/resume-data";
 import { Badge } from "@/components/ui/badge";
 import { SpotlightCard } from "@/components/SpotlightCard";
@@ -53,9 +54,21 @@ export function Projects() {
                       </Badge>
                     ))}
                   </div>
-                  {p.architecture && (
-                    <ArchitectureModal data={p.architecture} projectName={p.name} />
-                  )}
+                  <div className="flex flex-wrap items-center gap-3">
+                    {p.architecture && (
+                      <ArchitectureModal data={p.architecture} projectName={p.name} />
+                    )}
+                    {p.repoUrl && (
+                      <a href={p.repoUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 font-mono text-[10px] text-primary hover:text-primary/80 underline underline-offset-2">
+                        <Github className="h-3 w-3" /> {lang === "fa" ? "سورس" : "Source"}
+                      </a>
+                    )}
+                    {p.demoUrl && (
+                      <a href={p.demoUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 font-mono text-[10px] text-primary hover:text-primary/80 underline underline-offset-2">
+                        <ExternalLink className="h-3 w-3" /> {lang === "fa" ? "نسخه آنلاین" : "Live Demo"}
+                      </a>
+                    )}
+                  </div>
                 </div>
               </SpotlightCard>
             </motion.div>

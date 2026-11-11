@@ -1,9 +1,11 @@
 # dibbed
 
-Portfolio / resume site.
+Bilingual portfolio for Python backend engineering, automation, developer tooling, and psychology learning projects. Project descriptions are curated from the linked public repositories, without unverifiable throughput or user-count claims.
 
 - **Live:** [https://dibbed.github.io/](https://dibbed.github.io/)
 - **GitHub:** [https://github.com/dibbed](https://github.com/dibbed)
+- **GitHub profile README:** [https://github.com/dibbed/dibbed](https://github.com/dibbed/dibbed)
+- **Periodic table demo:** [https://dibbed.github.io/smart-periodic-table-fullstack/](https://dibbed.github.io/smart-periodic-table-fullstack/)
 
 Stack: Vite, TypeScript, React, shadcn-ui, Tailwind CSS, Framer Motion, React Router.
 
@@ -36,6 +38,14 @@ npm run dev
 2. Push to `main`. The workflow builds and deploys; site: **https://dibbed.github.io/**.
 
 To have the site at the root URL above, use a repo named `dibbed.github.io` under the [dibbed](https://github.com/dibbed) account.
+
+### Content accuracy
+
+- Featured project cards link directly to their public GitHub repositories, with a separate live demo link where available.
+- The radar chart counts selected projects in each focus area; it is **not** a percentage-based skill assessment.
+- GitHub Activity loads public events from GitHub's API. If the API is unavailable, the site shows an explicit fallback rather than fabricated commits.
+- Repository count is a snapshot of the public GitHub profile (November 2026); update it when the count changes.
+- Full-stack APIs are not hosted by GitHub Pages. The periodic-table demo is a static frontend build.
 
 ### Resume (Download CV)
 

@@ -7,62 +7,56 @@ import { translations } from "@/i18n/translations";
 interface GitHubEvent {
   repo: string;
   message: string;
-  date: string; // ISO 8601
+  date: string;
 }
 
-const mockEvents: GitHubEvent[] = [
-  { repo: "dibbed/kurigram", message: "fix: Add missing ChatPrivileges import", date: "2025-11-11T17:58:30Z" },
-  { repo: "dibbed/TTSKit-multi-engine-tts", message: "fix: correct issues in api.md", date: "2025-09-26T10:00:00Z" },
-  { repo: "dibbed/dibbed", message: "docs: Update README.md", date: "2025-09-25T08:00:00Z" },
-  { repo: "dibbed/nginx-ssl-auto", message: "docs: Add Persian version of README", date: "2025-09-16T12:00:00Z" },
-  { repo: "dibbed/iranconcert_scanner", message: "feat: Playwright-based seat auto-scanner for iranconcert.com", date: "2025-09-13T15:00:00Z" },
-];
-
 function relativeTime(dateStr: string): string {
-  const now = Date.now();
-  const then = new Date(dateStr).getTime();
-  const diff = Math.floor((now - then) / 1000);
-  if (diff < 60) return `${diff}s ago`;
-  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-  return `${Math.floor(diff / 86400)}d ago`;
+  const seconds = Math.max(0, Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000));
+  if (seconds < 60) return `${seconds}s ago`;
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+  return `${Math.floor(seconds / 86400)}d ago`;
 }
 
 export function GitHubActivity() {
-  const [events, setEvents] = useState<GitHubEvent[]>(mockEvents);
+  const [events, setEvents] = useState<GitHubEvent[]>([]);
   const [loading, setLoading] = useState(true);
-  const { t } = useLanguage();
+  const [tick, setTick] = useState(0);
+  const { t, lang } = useLanguage();
 
   useEffect(() => {
-    fetch("https://api.github.com/users/dibbed/events/public")
-      .then((r) => {
-        if (!r.ok) throw new Error("rate limited");
-        return r.json();
+    const controller = new AbortController();
+    fetch("https://api.github.com/users/dibbed/events/public?per_page=50", { signal: controller.signal })
+      .then((response) => {
+        if (!response.ok) throw new Error("GitHub activity unavailable");
+        return response.json();
       })
-      .then((data: any[]) => {
+      .then((data: unknown) => {
+        if (!Array.isArray(data)) throw new Error("Invalid GitHub response");
         const parsed: GitHubEvent[] = data
-          .filter((e) => e.type === "PushEvent" && e.payload?.commits?.length)
+          .filter((event) => event.type === "PushEvent" && event.repo?.name && event.created_at)
+          .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
           .slice(0, 5)
-          .map((e) => ({
-            repo: e.repo.name,
-            message: e.payload.commits[0].message.split("\n")[0].slice(0, 60),
-            date: e.created_at,
+          .map((event) => ({
+            repo: event.repo.name,
+            message: String(event.payload?.commits?.[0]?.message || `Push to ${String(event.payload?.ref || "branch").replace("refs/heads/", "")} (${String(event.payload?.head || "").slice(0, 7)})`)
+              .split("\n")[0].slice(0, 70),
+            date: event.created_at,
           }));
-        if (parsed.length > 0) setEvents(parsed);
+        setEvents(parsed);
       })
-      .catch(() => {})
-      .finally(() => setLoading(false));
+      .catch(() => { /* Never render fabricated fallback activity. */ })
+      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    return () => controller.abort();
   }, []);
 
-  // Recompute relative times every minute
-  const [tick, setTick] = useState(0);
   useEffect(() => {
-    const id = setInterval(() => setTick((t) => t + 1), 60_000);
-    return () => clearInterval(id);
+    const interval = setInterval(() => setTick((value) => value + 1), 60_000);
+    return () => clearInterval(interval);
   }, []);
 
   const displayEvents = useMemo(
-    () => events.map((ev) => ({ ...ev, time: relativeTime(ev.date) })),
+    () => events.map((event) => ({ ...event, time: relativeTime(event.date) })),
     [events, tick]
   );
 
@@ -86,14 +80,19 @@ export function GitHubActivity() {
           <div className="font-mono text-[11px] text-muted-foreground animate-pulse">
             {t(translations.activity.scanning)}
           </div>
+        ) : displayEvents.length === 0 ? (
+          <a href="https://github.com/dibbed" target="_blank" rel="noopener noreferrer"
+            className="font-mono text-[11px] text-muted-foreground underline underline-offset-2 hover:text-primary">
+            {lang === "fa" ? "فعالیت عمومی در دسترس نیست؛ مشاهده GitHub" : "Public activity unavailable. View GitHub profile."}
+          </a>
         ) : (
           <div className="space-y-1.5" dir="ltr">
-            {displayEvents.map((ev, i) => (
-              <div key={i} className="flex items-start gap-2 font-mono text-[11px] text-muted-foreground text-left">
+            {displayEvents.map((event, index) => (
+              <div key={index} className="flex items-start gap-2 font-mono text-[11px] text-muted-foreground text-left">
                 <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-primary/60" />
-                <span className="text-primary/90 shrink-0">{ev.repo}</span>
-                <span className="truncate flex-1 opacity-70">— {ev.message}</span>
-                <span className="shrink-0 text-muted-foreground/50">[{ev.time}]</span>
+                <span className="text-primary/90 shrink-0">{event.repo}</span>
+                <span className="truncate flex-1 opacity-70">— {event.message}</span>
+                <span className="shrink-0 text-muted-foreground/50">[{event.time}]</span>
               </div>
             ))}
           </div>
