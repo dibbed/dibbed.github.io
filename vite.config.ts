@@ -3,7 +3,8 @@ import path from "path";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: "./",
+  // Root-hosted GitHub Pages portfolio; absolute assets work on case-study deep links.
+  base: "/",
   server: {
     host: "::",
     port: 8080,

@@ -6,6 +6,7 @@ import { Hero } from "@/components/Hero";
 import { Skills } from "@/components/Skills";
 import { Experience } from "@/components/Experience";
 import { Projects } from "@/components/Projects";
+import { HiringTrail } from "@/components/HiringTrail";
 import { Education } from "@/components/Education";
 import { Contact } from "@/components/Contact";
 import { GitHubActivity } from "@/components/GitHubActivity";
@@ -70,10 +71,12 @@ const Index = () => {
   }, [isLightweight, booted, handleBootComplete]);
 
   useEffect(() => {
-    if (!booted || !window.location.hash.startsWith("#project-")) return;
+    if (!booted || !window.location.hash.startsWith("#")) return;
     const anchor = decodeURIComponent(window.location.hash.slice(1));
-    if (!projects.some((project) => projectAnchor(project.name) === anchor)) return;
-    // Let React mount its cards, then restore the anchored view after the intro.
+    const sections = ["hero", "for-teams", "projects", "skills", "experience", "education", "contact"];
+    const sharedProject = projects.some((project) => projectAnchor(project.name) === anchor);
+    if (!sections.includes(anchor) && !sharedProject) return;
+    // Handle both direct project links and React Router back-links to #projects.
     const frame = window.requestAnimationFrame(() =>
       document.getElementById(anchor)?.scrollIntoView({ behavior: "auto", block: "start" })
     );
@@ -165,15 +168,16 @@ const Index = () => {
         <MatrixRain active={matrixActive} />
         <main id="main-content" tabIndex={-1} className="relative">
           <Hero />
-          <GitHubActivity />
-          <Skills onFilterProjects={handleFilterProjectsFromMap} />
-          <Experience />
+          <HiringTrail />
           <Projects
             activeFilter={projectFilter}
             onFilterChange={setProjectFilter}
             searchQuery={projectSearch}
             onSearchChange={setProjectSearch}
           />
+          <Skills onFilterProjects={handleFilterProjectsFromMap} />
+          <Experience />
+          <GitHubActivity />
           <Education />
           <Contact />
         </main>

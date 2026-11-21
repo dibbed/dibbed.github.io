@@ -44,6 +44,9 @@ jobs:
       - name: Verify output assets
         run: |
           test -f dist/index.html
+          # Deep GitHub Pages routes must load root-absolute JS/CSS assets.
+          grep -Eq 'src="/assets/' dist/index.html
+          grep -Eq 'href="/assets/' dist/index.html
           test -f dist/404.html
           test -f dist/og-card.png
           test -f dist/resume.pdf
