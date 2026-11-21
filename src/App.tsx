@@ -6,7 +6,7 @@ import { LightweightModeProvider } from "@/hooks/use-lightweight-mode";
 import { OrbitalVoid } from "@/components/OrbitalVoid";
 import { getBasePath } from "@/lib/utils";
 import { MotionConfig } from "framer-motion";
-import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import { lazy, Suspense, type ReactNode } from "react";
 import Index from "./pages/Index";
 const CaseStudyPage = lazy(() => import("./pages/CaseStudy"));

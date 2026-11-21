@@ -2,7 +2,8 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { LanguageProvider } from "@/i18n/LanguageContext";
-import { LightweightModeProvider, useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { LightweightModeProvider } from "@/hooks/use-lightweight-mode";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import { CinematicShowcase } from "@/components/CinematicShowcase";
 import { ScrollStage } from "@/components/ScrollStage";
 import { ScrollProgress } from "@/components/ScrollProgress";
@@ -13,7 +14,7 @@ function renderShowcase() {
   return render(
     <LightweightModeProvider>
       <LanguageProvider>
-        <MemoryRouter>
+        <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <CinematicShowcase />
           <ScrollStage><section>Next editorial section</section></ScrollStage>
           <ScrollProgress />

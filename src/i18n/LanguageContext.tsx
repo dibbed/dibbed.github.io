@@ -1,17 +1,9 @@
-import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
+import { useState, useCallback, useEffect, type ReactNode } from "react";
 import type { Lang } from "./translations";
+import { LanguageContext } from "./language-context";
 
 const STORAGE_KEY = "portfolio-lang";
 
-interface LanguageContextType {
-  lang: Lang;
-  setLang: (lang: Lang) => void;
-  toggleLang: () => void;
-  t: <T>(obj: { en: T; fa: T }) => T;
-  isRtl: boolean;
-}
-
-const LanguageContext = createContext<LanguageContextType | null>(null);
 
 function readInitialLang(): Lang {
   if (typeof window === "undefined") return "en";
@@ -67,10 +59,4 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       {children}
     </LanguageContext.Provider>
   );
-}
-
-export function useLanguage() {
-  const ctx = useContext(LanguageContext);
-  if (!ctx) throw new Error("useLanguage must be used within LanguageProvider");
-  return ctx;
 }

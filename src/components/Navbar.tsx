@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/i18n/LanguageContext";
+import { useLanguage } from "@/i18n/use-language";
 import { translations } from "@/i18n/translations";
-import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import { getResumeUrl } from "@/lib/utils";
 import { Command, FileDown, Languages, Moon, Sun, Terminal, Zap } from "lucide-react";
 import { useTheme } from "next-themes";

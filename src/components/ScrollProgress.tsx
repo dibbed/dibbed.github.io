@@ -1,5 +1,5 @@
 import { motion, useScroll, useSpring } from "framer-motion";
-import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 
 function AnimatedProgress() {
   const { scrollYProgress } = useScroll();

@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useRef, useState, type ReactNode } from "react";
-import { useLanguage } from "@/i18n/LanguageContext";
+import { useLanguage } from "@/i18n/use-language";
 
 interface DeferredSectionProps {
   id: string;

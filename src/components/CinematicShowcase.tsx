@@ -5,7 +5,7 @@ import {
 import { Link } from "react-router-dom";
 import { ArrowDown, ArrowUpRight, BrainCircuit, ChevronRight, GitBranch, ShieldCheck, TerminalSquare } from "lucide-react";
 import { caseStudies, caseStudyUrl, type CaseStudy } from "@/data/case-studies";
-import { useLanguage } from "@/i18n/LanguageContext";
+import { useLanguage } from "@/i18n/use-language";
 import { useCinematicMotion } from "@/hooks/use-cinematic-motion";
 import { ScrollStage } from "@/components/ScrollStage";
 

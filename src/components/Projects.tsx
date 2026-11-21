@@ -9,8 +9,8 @@ import { SpotlightCard } from "@/components/SpotlightCard";
 import { ArchitectureLauncher } from "@/components/ArchitectureLauncher";
 import { toast } from "sonner";
 import { projectAnchor, projectShareUrl } from "@/lib/project-links";
-import { useLanguage } from "@/i18n/LanguageContext";
-import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { useLanguage } from "@/i18n/use-language";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import { translations } from "@/i18n/translations";
 
 const FOCUS_AREAS = [

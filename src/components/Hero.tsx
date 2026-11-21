@@ -5,10 +5,10 @@ import { profile, achievements } from "@/data/resume-data";
 import { Button } from "@/components/ui/button";
 import { TypewriterText } from "@/components/TypewriterText";
 import { CountUp } from "@/components/CountUp";
-import { useLanguage } from "@/i18n/LanguageContext";
+import { useLanguage } from "@/i18n/use-language";
 import { translations } from "@/i18n/translations";
 import { getResumeUrl } from "@/lib/utils";
-import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import { useCinematicMotion } from "@/hooks/use-cinematic-motion";
 
 const container = {

@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import { education } from "@/data/resume-data";
 import { GraduationCap } from "lucide-react";
 import { SpotlightCard } from "@/components/SpotlightCard";
-import { useLanguage } from "@/i18n/LanguageContext";
-import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { useLanguage } from "@/i18n/use-language";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import { translations } from "@/i18n/translations";
 
 export function Education() {

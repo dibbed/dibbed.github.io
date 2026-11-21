@@ -6,8 +6,8 @@ import {
 import {
   Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle,
 } from "@/components/ui/sheet";
-import { useLanguage } from "@/i18n/LanguageContext";
-import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { useLanguage } from "@/i18n/use-language";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import { translations } from "@/i18n/translations";
 import { getResumeUrl } from "@/lib/utils";
 

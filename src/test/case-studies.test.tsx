@@ -16,7 +16,7 @@ function renderCase(slug: string) {
     <ThemeProvider attribute="class" defaultTheme="dark">
       <LightweightModeProvider>
       <LanguageProvider>
-        <MemoryRouter initialEntries={[caseStudyUrl(slug)]}>
+        <MemoryRouter initialEntries={[caseStudyUrl(slug)]} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <Routes>
             <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
           </Routes>
@@ -82,7 +82,7 @@ describe("source-backed flagship case studies", () => {
   it("makes the short hiring route navigate to each real case study", () => {
     render(
       <LanguageProvider>
-        <MemoryRouter>
+        <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <HiringTrail />
         </MemoryRouter>
       </LanguageProvider>,

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
-import { useLanguage } from "@/i18n/LanguageContext";
+import { useLanguage } from "@/i18n/use-language";
 import { translations } from "@/i18n/translations";
 import type { ArchitectureData, ProjectCaseStudy, TerminalPreviewData } from "@/data/resume-data";
 

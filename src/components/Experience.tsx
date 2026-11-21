@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import { experiences } from "@/data/resume-data";
 import { Badge } from "@/components/ui/badge";
 import { SpotlightCard } from "@/components/SpotlightCard";
-import { useLanguage } from "@/i18n/LanguageContext";
-import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { useLanguage } from "@/i18n/use-language";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import { translations } from "@/i18n/translations";
 
 const container = {
