@@ -55,3 +55,11 @@ Place your PDF as `public/resume.pdf`, then commit and push. After deploy, the �
 
 - **Blank page / 404 for `/src/main.tsx`** — Source is still “Deploy from a branch”. Switch to **GitHub Actions**.
 - **Download CV saves a broken file** — Ensure `public/resume.pdf` exists and is pushed; redeploy.
+
+
+### Resume and favicon assets
+
+- public/resume.pdf is the downloadable, two-page English engineering CV. Regenerate with python scripts/generate-resume.py (requires pymupdf).
+- public/favicon.svg is the white AK monogram with a fully transparent background. Regenerate PNG/ICO fallbacks with python scripts/generate-favicons.py (requires Pillow).
+- The root URL remains /resume.pdf for backward compatibility; download buttons save Ali_Khalili_CV.pdf.
+- Edit the source scripts and validate generated assets before committing changes.

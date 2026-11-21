@@ -112,7 +112,7 @@ export function Hero() {
             </a>
           </Button>
           <Button asChild variant="outline" className="min-h-11 gap-2 border-border/60 bg-card/50 font-mono text-xs backdrop-blur-sm hover:border-primary/50 hover:bg-primary/5 sm:text-sm">
-            <a href={getResumeUrl()} download>
+            <a href={getResumeUrl()} download="Ali_Khalili_CV.pdf">
               <FileDown className="h-4 w-4" aria-hidden="true" />
               {t(translations.hero.downloadCv)}
             </a>

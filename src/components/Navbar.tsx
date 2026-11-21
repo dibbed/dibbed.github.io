@@ -90,7 +90,7 @@ export function Navbar({ onOpenTerminal, onOpenCommandPalette }: NavbarProps) {
             <Button variant="ghost" size="icon" asChild>
               <a
                 href={getResumeUrl()}
-                download
+                download="Ali_Khalili_CV.pdf"
                 title={t(translations.nav.downloadCvLabel)}
                 aria-label={t(translations.nav.downloadCvLabel)}
               >

@@ -91,7 +91,7 @@ export function CommandPalette({ open, onOpenChange, onOpenTerminal, onSelectPro
     setOpen(false);
     const a = document.createElement("a");
     a.href = getResumeUrl();
-    a.download = "resume.pdf";
+    a.download = "Ali_Khalili_CV.pdf";
     a.click();
   };
 
