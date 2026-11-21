@@ -7,12 +7,21 @@ import { LanguageProvider } from "@/i18n/LanguageContext";
 import { LightweightModeProvider } from "@/hooks/use-lightweight-mode";
 import { OrbitalVoid } from "@/components/OrbitalVoid";
 import { getBasePath } from "@/lib/utils";
+import { MotionConfig } from "framer-motion";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import type { ReactNode } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+
+function MotionPreferences({ children }: { children: ReactNode }) {
+  const { isLightweight } = useLightweightMode();
+  return <MotionConfig reducedMotion={isLightweight ? "always" : "user"}>{children}</MotionConfig>;
+}
 
 const App = () => (
   <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
     <LightweightModeProvider>
+      <MotionPreferences>
       <LanguageProvider>
         <TooltipProvider>
           <OrbitalVoid />
@@ -26,6 +35,7 @@ const App = () => (
           </BrowserRouter>
         </TooltipProvider>
       </LanguageProvider>
+      </MotionPreferences>
     </LightweightModeProvider>
   </ThemeProvider>
 );

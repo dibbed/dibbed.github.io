@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Github, Send, Mail, Globe, MapPin } from "lucide-react";
 import { profile } from "@/data/resume-data";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode";
 import { translations } from "@/i18n/translations";
 
 const links = [
@@ -12,12 +13,13 @@ const links = [
 
 export function Contact() {
   const { t, lang } = useLanguage();
+  const { isLightweight } = useLightweightMode();
 
   return (
     <footer id="contact" className="border-t border-border/40 px-4 py-16">
       <div className="mx-auto max-w-4xl text-center">
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
+          initial={isLightweight ? false : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           className="mb-6 font-mono text-3xl font-bold"
@@ -26,7 +28,7 @@ export function Contact() {
         </motion.h2>
 
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={isLightweight ? false : { opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           className="mb-8 flex flex-wrap items-center justify-center gap-6"
@@ -47,7 +49,7 @@ export function Contact() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={isLightweight ? false : { opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           className="space-y-2 text-sm text-muted-foreground"

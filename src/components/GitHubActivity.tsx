@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { RefreshCw } from "lucide-react";
 import { SpotlightCard } from "@/components/SpotlightCard";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode";
 import { translations, type Lang } from "@/i18n/translations";
 
 interface GitHubEvent {
@@ -31,8 +32,8 @@ interface RawGitHubRepo {
   fork?: boolean;
 }
 
-function relativeTime(dateStr: string, lang: Lang): string {
-  const seconds = Math.max(0, Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000));
+function relativeTime(dateStr: string, lang: Lang, now: number): string {
+  const seconds = Math.max(0, Math.floor((now - new Date(dateStr).getTime()) / 1000));
   if (lang === "fa") {
     if (seconds < 60) return "همین الان";
     if (seconds < 3600) return `${Math.floor(seconds / 60)} دقیقه پیش`;
@@ -50,8 +51,9 @@ export function GitHubActivity() {
   const [sourceMode, setSourceMode] = useState<"events" | "repos">("events");
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [tick, setTick] = useState(0);
+  const [tick, setTick] = useState(() => Date.now());
   const { t, lang } = useLanguage();
+  const { isLightweight } = useLightweightMode();
 
   const fetchActivity = useCallback(async (signal?: AbortSignal, isManual = false) => {
     if (isManual) setRefreshing(true);
@@ -142,18 +144,18 @@ export function GitHubActivity() {
   }, [fetchActivity]);
 
   useEffect(() => {
-    const interval = setInterval(() => setTick((value) => value + 1), 60_000);
+    const interval = setInterval(() => setTick(Date.now()), 60_000);
     return () => clearInterval(interval);
   }, []);
 
   const displayEvents = useMemo(
-    () => events.map((event) => ({ ...event, time: relativeTime(event.date, lang) })),
+    () => events.map((event) => ({ ...event, time: relativeTime(event.date, lang, tick) })),
     [events, tick, lang]
   );
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={isLightweight ? false : { opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.45 }}

@@ -3,6 +3,7 @@ import { experiences } from "@/data/resume-data";
 import { Badge } from "@/components/ui/badge";
 import { SpotlightCard } from "@/components/SpotlightCard";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode";
 import { translations } from "@/i18n/translations";
 
 const container = {
@@ -17,12 +18,13 @@ const item = {
 
 export function Experience() {
   const { t, lang } = useLanguage();
+  const { isLightweight } = useLightweightMode();
 
   return (
     <section id="experience" className="px-4 py-24">
       <div className="mx-auto max-w-4xl">
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
+          initial={isLightweight ? false : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="mb-12 text-center font-mono text-3xl font-bold"
@@ -39,7 +41,7 @@ export function Experience() {
 
           <motion.div
             variants={container}
-            initial="hidden"
+            initial={isLightweight ? false : "hidden"}
             whileInView="show"
             viewport={{ once: true, margin: "-100px" }}
             className="space-y-6"

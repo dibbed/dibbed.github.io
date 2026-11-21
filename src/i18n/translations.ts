@@ -2,6 +2,9 @@ export type Lang = "en" | "fa";
 
 export const translations = {
   nav: {
+    primaryNav: { en: "Primary navigation", fa: "منوی اصلی" },
+    skipToContent: { en: "Skip to main content", fa: "رفتن به محتوای اصلی" },
+    systemReducedMotion: { en: "Reduced motion is enabled by your device", fa: "کاهش حرکت در تنظیمات دستگاه فعال است" },
     home: { en: "Home", fa: "خانه" },
     skills: { en: "Skills", fa: "مهارت‌ها" },
     experience: { en: "Experience", fa: "تجربه" },
@@ -81,6 +84,7 @@ export const translations = {
     downloadCv: { en: "Download CV", fa: "دانلود رزومه" },
     copyEmail: { en: "Copy Email", fa: "کپی کردن ایمیل" },
     emailCopied: { en: "Email copied to clipboard", fa: "ایمیل در کلیپ‌بورد کپی شد" },
+    emailCopyFailed: { en: "Could not copy email. Please copy it manually.", fa: "کپی ایمیل انجام نشد. لطفاً به صورت دستی کپی کنید." },
     lightweightEnabled: { en: "Lightweight mode enabled", fa: "حالت سبک فعال شد" },
     lightweightDisabled: { en: "Full visual effects enabled", fa: "افکت‌های گرافیکی کامل فعال شد" },
   },
@@ -115,6 +119,14 @@ export const translations = {
     systemArchitecture: { en: "System Architecture", fa: "معماری سیستم" },
     diagramTab: { en: "Diagram", fa: "دیاگرام" },
     previewTab: { en: "Terminal Preview", fa: "پیش‌نمایش ترمینال" },
+    caseStudyTab: { en: "Engineering Notes", fa: "جزئیات مهندسی" },
+    caseProblem: { en: "Problem", fa: "مسئله" },
+    caseApproach: { en: "Design approach", fa: "رویکرد طراحی" },
+    caseEvidence: { en: "Inspect the source", fa: "بررسی سورس واقعی" },
+    demoDisclaimer: {
+      en: "Illustrative example, not a recorded test run or live shell output. Exact results depend on your environment.",
+      fa: "این خروجی صرفاً نمونه نمایشی است، نه نتیجه تست یا اجرای واقعی. نتیجه به محیط اجرا بستگی دارد.",
+    },
     inspectNodesHint: {
       en: "Select a component below to inspect its role:",
       fa: "برای دیدن نقش هر بخش در معماری، روی آن کلیک کن:",

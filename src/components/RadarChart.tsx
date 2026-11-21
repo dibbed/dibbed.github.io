@@ -12,6 +12,7 @@ import {
 import { SpotlightCard } from "@/components/SpotlightCard";
 import { projects } from "@/data/resume-data";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode";
 
 // Areas are explicit tags on featured projects, not subjective skill percentages.
 const areas = [
@@ -38,6 +39,7 @@ interface SkillRadarChartProps {
 
 export function SkillRadarChart({ onFilterProjects }: SkillRadarChartProps) {
   const { lang } = useLanguage();
+  const { isLightweight } = useLightweightMode();
   const [selected, setSelected] = useState<AreaKey>("Backend");
   const selectedArea = coverage.find((area) => area.key === selected)!;
   const matchingProjects = projects.filter((project) => project.focus?.includes(selected));
@@ -55,7 +57,7 @@ export function SkillRadarChart({ onFilterProjects }: SkillRadarChartProps) {
     if (onFilterProjects) {
       onFilterProjects(selected);
     }
-    document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" });
+    document.querySelector("#projects")?.scrollIntoView({ behavior: isLightweight ? "auto" : "smooth" });
   };
 
   return (

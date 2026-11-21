@@ -56,6 +56,15 @@ export interface TerminalPreviewData {
   output: string[];
 }
 
+/** Editorial engineering notes with inspectable source links, not benchmark claims. */
+export interface ProjectCaseStudy {
+  problem: string;
+  problemFa: string;
+  approach: string;
+  approachFa: string;
+  evidence: { label: string; url: string }[];
+}
+
 export interface Project {
   name: string;
   description: string;
@@ -69,6 +78,7 @@ export interface Project {
   highlights?: string[];
   highlightsFa?: string[];
   terminalPreview?: TerminalPreviewData;
+  caseStudy?: ProjectCaseStudy;
 }
 
 export interface Education {
@@ -315,6 +325,17 @@ export const projects: Project[] = [
     repoUrl: "https://github.com/dibbed/computerpilot-mcp",
     focus: ["Backend", "DevOps", "Automation"],
     featured: true,
+    caseStudy: {
+      problem: "Automation tools must survive interruptions without silently repeating state-changing work, while supporting different operating systems.",
+      problemFa: "ابزارهای اتوماسیون باید در برابر قطع شدن مقاوم باشند، بدون اینکه عملیات تغییردهنده را ناخواسته تکرار کنند؛ در عین حال روی چند سیستم‌عامل کار کنند.",
+      approach: "Typed MCP tools, OS capability gates and SQLite-backed durable jobs separate execution, authorization and recovery responsibilities.",
+      approachFa: "ابزارهای نوع‌دار MCP، محدودسازی امکانات بر اساس سیستم‌عامل و کارهای ماندگار مبتنی بر SQLite مسئولیت اجرا، مجوز و بازیابی را جدا می‌کنند.",
+      evidence: [
+        { label: "Architecture documentation", url: "https://github.com/dibbed/computerpilot-mcp/blob/main/docs/architecture.md" },
+        { label: "Platform capability tests", url: "https://github.com/dibbed/computerpilot-mcp/blob/main/tests/test_platform_capabilities.py" },
+        { label: "Cross-platform CI", url: "https://github.com/dibbed/computerpilot-mcp/blob/main/.github/workflows/platform-validation.yml" },
+      ],
+    },
     highlights: [
       "Typed MCP tools with capability gating per OS target",
       "Durable SQLite-backed jobs with restart recovery & mutation safeguards",
@@ -326,12 +347,11 @@ export const projects: Project[] = [
       "آزمون خودکار CI روی ویندوز، لینوکس و مک",
     ],
     terminalPreview: {
-      command: "python -m computerpilot.doctor --capabilities",
+      command: "python scripts/doctor.py --check",
       output: [
-        "[ok] runtime: ComputerPilot MCP (stdio / typed-tools)",
-        "[ok] state_store: sqlite (durable jobs + recovery enabled)",
-        "[ok] modules: filesystem, terminal, git, playwright, lsp",
-        "[info] platform_capabilities: capability-gated per OS",
+        "# Demonstration only; this is not an actual diagnostic log.",
+        "# --check validates a cached success fingerprint (exit 0 or 2).",
+        "# For full validation, use the project installation guide.",
       ],
     },
     architecture: {
@@ -379,6 +399,17 @@ export const projects: Project[] = [
     repoUrl: "https://github.com/dibbed/tenant-rag",
     focus: ["Backend", "AI/ML"],
     featured: true,
+    caseStudy: {
+      problem: "A multi-tenant retrieval service must not return or cache one tenant\u0027s documents for another tenant.",
+      problemFa: "در سرویس بازیابی چندمستاجری، داده و پاسخ‌های کش‌شده یک مستاجر نباید به مستاجر دیگری برسد.",
+      approach: "Authentication resolves a tenant scope before retrieval, and vector stores, cache keys and tests preserve that boundary.",
+      approachFa: "درخواست پیش از بازیابی به مستاجر مشخص متصل می‌شود و فضای برداری، کلیدهای کش و تست‌ها مرز دسترسی را کنترل می‌کنند.",
+      evidence: [
+        { label: "Architecture documentation", url: "https://github.com/dibbed/tenant-rag/blob/main/docs/ARCHITECTURE.md" },
+        { label: "Multi-tenant isolation tests", url: "https://github.com/dibbed/tenant-rag/blob/main/tests/integration/test_multi_tenant_isolation.py" },
+        { label: "CI workflow", url: "https://github.com/dibbed/tenant-rag/blob/main/.github/workflows/ci.yml" },
+      ],
+    },
     highlights: [
       "Per-tenant vector store and semantic cache isolation",
       "Hashed API key authentication and explicit request validation",
@@ -390,12 +421,11 @@ export const projects: Project[] = [
       "مستندسازی شفاف مرزهای امنیتی همراه با آزمون‌های خودکار pytest",
     ],
     terminalPreview: {
-      command: "pytest tests/test_tenant_isolation.py -q",
+      command: "pytest tests/integration/test_multi_tenant_isolation.py -q",
       output: [
-        "test_hashed_api_key_binds_single_tenant_scope .......... PASSED",
-        "test_semantic_cache_never_leaks_across_tenants ......... PASSED",
-        "test_vector_retrieval_restricted_to_namespace .......... PASSED",
-        "3 passed — isolation boundaries verified",
+        "# Demonstration only: run the real test module above for actual results.",
+        "# Coverage includes API authorization and tenant-scoped retrieval.",
+        "# Test counts and pass/fail status depend on the checked-out revision.",
       ],
     },
     architecture: {
@@ -443,6 +473,17 @@ export const projects: Project[] = [
     repoUrl: "https://github.com/dibbed/psychology-atlas",
     focus: ["Backend", "Frontend", "Psychology"],
     featured: true,
+    caseStudy: {
+      problem: "Persian-language learners need psychology references that distinguish sourced educational material from diagnosis and speculation.",
+      problemFa: "یادگیرنده فارسی‌زبان به منابع روانشناسی نیاز دارد که محتوای آموزشی مستند را از تشخیص بالینی و ادعاهای بدون پشتوانه جدا کند.",
+      approach: "A Persian-first Next.js interface and Django API organize linked concepts, brain references and assessment metadata with attribution.",
+      approachFa: "رابط فارسی‌محور Next.js و API جنگو، مفاهیم مرتبط، مراجع اطلس مغز و داده‌های سنجش را همراه با ارجاع منظم می‌کنند.",
+      evidence: [
+        { label: "Repository overview", url: "https://github.com/dibbed/psychology-atlas/blob/main/README.md" },
+        { label: "Brain atlas API implementation", url: "https://github.com/dibbed/psychology-atlas/blob/main/backend/atlas/brain_views.py" },
+        { label: "CI workflow", url: "https://github.com/dibbed/psychology-atlas/blob/main/.github/workflows/ci.yml" },
+      ],
+    },
     highlights: [
       "Persian-first RTL architecture with Django REST API & Next.js frontend",
       "Source-attributed knowledge graphs, Brain Atlas & assessment references",

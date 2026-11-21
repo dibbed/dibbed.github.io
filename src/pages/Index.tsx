@@ -14,6 +14,8 @@ import { MatrixRain } from "@/components/MatrixRain";
 import { BootSequence } from "@/components/BootSequence";
 import { useKonamiCode } from "@/hooks/use-konami-code";
 import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { useLanguage } from "@/i18n/LanguageContext";
+import { translations } from "@/i18n/translations";
 
 const BOOT_STORAGE_KEY = "portfolio-boot-seen";
 
@@ -28,6 +30,7 @@ function hasSeenBoot(): boolean {
 
 const Index = () => {
   const { isLightweight } = useLightweightMode();
+  const { t } = useLanguage();
   const [matrixActive, setMatrixActive] = useState(false);
   const [booted, setBooted] = useState<boolean>(() => isLightweight || hasSeenBoot());
   const [projectFilter, setProjectFilter] = useState<string>("All");
@@ -51,7 +54,7 @@ const Index = () => {
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key === "`") {
+      if ((e.ctrlKey || e.metaKey) && e.key === "`") {
         e.preventDefault();
         setTerminalOpen((prev) => !prev);
       }
@@ -90,6 +93,13 @@ const Index = () => {
         {!booted && <BootSequence onComplete={handleBootComplete} />}
       </AnimatePresence>
 
+      <a
+        href="#main-content"
+        className="sr-only fixed left-4 top-3 z-[110] rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground focus:not-sr-only"
+      >
+        {t(translations.nav.skipToContent)}
+      </a>
+
       {/* No opaque bg-background here so OrbitalVoid canvas stays visible behind sections */}
       <motion.div
         initial={isLightweight ? false : { opacity: 0 }}
@@ -108,7 +118,7 @@ const Index = () => {
           onFilterProjects={handleFilterProjectsFromMap}
         />
         <MatrixRain active={matrixActive} />
-        <main className="relative">
+        <main id="main-content" tabIndex={-1} className="relative">
           <Hero />
           <GitHubActivity />
           <Skills onFilterProjects={handleFilterProjectsFromMap} />

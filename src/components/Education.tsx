@@ -3,16 +3,18 @@ import { education } from "@/data/resume-data";
 import { GraduationCap } from "lucide-react";
 import { SpotlightCard } from "@/components/SpotlightCard";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode";
 import { translations } from "@/i18n/translations";
 
 export function Education() {
   const { t, lang } = useLanguage();
+  const { isLightweight } = useLightweightMode();
 
   return (
     <section id="education" className="px-4 py-24">
       <div className="mx-auto max-w-3xl">
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
+          initial={isLightweight ? false : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="mb-12 text-center font-mono text-3xl font-bold"
@@ -24,7 +26,7 @@ export function Education() {
           {education.map((ed, i) => (
             <motion.div
               key={ed.degree}
-              initial={{ opacity: 0, y: 20 }}
+              initial={isLightweight ? false : { opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.45 }}

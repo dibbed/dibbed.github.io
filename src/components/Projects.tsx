@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { SpotlightCard } from "@/components/SpotlightCard";
 import { ArchitectureModal } from "@/components/ArchitectureModal";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode";
 import { translations } from "@/i18n/translations";
 
 const FOCUS_AREAS = [
@@ -32,6 +33,7 @@ export function Projects({
   onSearchChange,
 }: ProjectsProps) {
   const { t, lang } = useLanguage();
+  const { isLightweight } = useLightweightMode();
 
   const isFiltered = activeFilter !== "All" || searchQuery.trim().length > 0;
 
@@ -69,7 +71,7 @@ export function Projects({
     <section id="projects" className="px-4 py-24">
       <div className="mx-auto max-w-5xl">
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
+          initial={isLightweight ? false : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           className="mb-8 text-center font-mono text-3xl font-bold"
@@ -203,6 +205,7 @@ export function Projects({
                             data={p.architecture}
                             projectName={p.name}
                             terminalPreview={p.terminalPreview}
+                          caseStudy={p.caseStudy}
                           />
                         )}
                         {p.repoUrl && (
@@ -304,6 +307,7 @@ export function Projects({
                           data={p.architecture}
                           projectName={p.name}
                           terminalPreview={p.terminalPreview}
+                          caseStudy={p.caseStudy}
                         />
                       )}
                       {p.repoUrl && (

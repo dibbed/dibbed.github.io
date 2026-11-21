@@ -41,7 +41,7 @@ export function CommandPalette({ onOpenTerminal, onSelectProject }: CommandPalet
   const [open, setOpen] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
   const { t, toggleLang } = useLanguage();
-  const { isLightweight, toggleLightweight } = useLightweightMode();
+  const { isLightweight, manualLightweight, prefersReducedMotion, toggleLightweight } = useLightweightMode();
 
   const navItems = [
     { label: t(translations.nav.home), href: "#hero", icon: Home },
@@ -80,7 +80,8 @@ export function CommandPalette({ onOpenTerminal, onSelectProject }: CommandPalet
   };
 
   const handleToggleLightweight = () => {
-    const next = !isLightweight;
+    if (prefersReducedMotion) return;
+    const next = !manualLightweight;
     toggleLightweight();
     toast.success(
       next
@@ -103,10 +104,14 @@ export function CommandPalette({ onOpenTerminal, onSelectProject }: CommandPalet
     a.click();
   };
 
-  const copyEmail = () => {
-    navigator.clipboard.writeText(profile.email);
-    toast.success(t(translations.commandPalette.emailCopied));
-    setOpen(false);
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(profile.email);
+      toast.success(t(translations.commandPalette.emailCopied));
+      setOpen(false);
+    } catch {
+      toast.error(t(translations.commandPalette.emailCopyFailed));
+    }
   };
 
   const handleSelectProject = (projectName: string, repoUrl?: string) => {
@@ -172,9 +177,11 @@ export function CommandPalette({ onOpenTerminal, onSelectProject }: CommandPalet
             <Languages className="mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0" aria-hidden="true" />
             <span>{t(translations.commandPalette.toggleLanguage)}</span>
           </CommandItem>
-          <CommandItem onSelect={handleToggleLightweight}>
+          <CommandItem onSelect={handleToggleLightweight} disabled={prefersReducedMotion}>
             <Zap className="mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0" aria-hidden="true" />
-            <span>{t(translations.commandPalette.toggleLightweight)}</span>
+            <span>{prefersReducedMotion
+              ? t(translations.nav.systemReducedMotion)
+              : t(translations.commandPalette.toggleLightweight)}</span>
           </CommandItem>
           <CommandItem onSelect={downloadCV}>
             <FileDown className="mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0" aria-hidden="true" />

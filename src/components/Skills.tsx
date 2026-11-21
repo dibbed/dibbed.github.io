@@ -4,6 +4,7 @@ import { skills } from "@/data/resume-data";
 import { Badge } from "@/components/ui/badge";
 import { SpotlightCard } from "@/components/SpotlightCard";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode";
 import { translations } from "@/i18n/translations";
 
 const SkillRadarChart = lazy(() => import("@/components/RadarChart"));
@@ -35,12 +36,13 @@ interface SkillsProps {
 
 export function Skills({ onFilterProjects }: SkillsProps) {
   const { t, lang } = useLanguage();
+  const { isLightweight } = useLightweightMode();
 
   return (
     <section id="skills" className="px-4 py-24">
       <div className="mx-auto max-w-5xl">
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
+          initial={isLightweight ? false : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           className="mb-12 text-center font-mono text-3xl font-bold"
@@ -50,7 +52,7 @@ export function Skills({ onFilterProjects }: SkillsProps) {
 
         {/* Lazy-loaded interactive project focus map */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={isLightweight ? false : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           className="mx-auto mb-8 max-w-4xl"
@@ -66,7 +68,7 @@ export function Skills({ onFilterProjects }: SkillsProps) {
 
         <motion.div
           variants={container}
-          initial="hidden"
+          initial={isLightweight ? false : "hidden"}
           whileInView="show"
           viewport={{ once: true, margin: "-50px" }}
           className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4"

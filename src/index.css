@@ -56,7 +56,7 @@
     --popover-foreground: 210 20% 92%;
 
     --primary: 160 84% 39%;
-    --primary-foreground: 0 0% 100%;
+    --primary-foreground: 224 71% 3%;
 
     --secondary: 224 30% 10%;
     --secondary-foreground: 210 20% 80%;
@@ -191,4 +191,21 @@ html.lightweight-mode .animate-orb-pulse-delayed,
 html.lightweight-mode .animate-scroll-bounce,
 html.lightweight-mode .animate-blink-cursor {
   animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+html.lightweight-mode *,
+html.lightweight-mode *::before,
+html.lightweight-mode *::after {
+  scroll-behavior: auto !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
 }

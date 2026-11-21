@@ -16,7 +16,7 @@ export function Navbar({ onOpenTerminal }: NavbarProps) {
   const { resolvedTheme, setTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { t, toggleLang, lang } = useLanguage();
-  const { isLightweight, toggleLightweight } = useLightweightMode();
+  const { isLightweight, manualLightweight, prefersReducedMotion, toggleLightweight } = useLightweightMode();
 
   const navLinks = [
     { label: t(translations.nav.home), href: "#hero" },
@@ -43,7 +43,7 @@ export function Navbar({ onOpenTerminal }: NavbarProps) {
 
   return (
     <nav
-      aria-label="Primary navigation"
+      aria-label={t(translations.nav.primaryNav)}
       className="fixed left-0 right-0 top-0 z-50 border-b border-border/40 bg-background/70 backdrop-blur-xl supports-[backdrop-filter]:bg-background/50"
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
@@ -57,7 +57,7 @@ export function Navbar({ onOpenTerminal }: NavbarProps) {
         </button>
 
         {/* Desktop */}
-        <div className="hidden items-center gap-5 md:flex">
+        <div className="hidden items-center gap-3 lg:flex xl:gap-5">
           {navLinks.map((l) => (
             <button
               type="button"
@@ -74,7 +74,7 @@ export function Navbar({ onOpenTerminal }: NavbarProps) {
               variant="ghost"
               size="icon"
               onClick={openCommandPalette}
-              title={`${t(translations.nav.commandPaletteLabel)} (⌘K)`}
+              title={`${t(translations.nav.commandPaletteLabel)} (Ctrl/⌘ K)`}
               aria-label={t(translations.nav.commandPaletteLabel)}
             >
               <Command className="h-4 w-4" aria-hidden="true" />
@@ -107,13 +107,14 @@ export function Navbar({ onOpenTerminal }: NavbarProps) {
               variant="ghost"
               size="icon"
               onClick={toggleLightweight}
-              aria-pressed={isLightweight}
-              title={
+              disabled={prefersReducedMotion}
+              aria-pressed={manualLightweight}
+              title={prefersReducedMotion ? t(translations.nav.systemReducedMotion) :
                 isLightweight
                   ? t(translations.nav.lightweightOnLabel)
                   : t(translations.nav.lightweightOffLabel)
               }
-              aria-label={
+              aria-label={prefersReducedMotion ? t(translations.nav.systemReducedMotion) :
                 isLightweight
                   ? t(translations.nav.lightweightOnLabel)
                   : t(translations.nav.lightweightOffLabel)
@@ -157,7 +158,7 @@ export function Navbar({ onOpenTerminal }: NavbarProps) {
         </div>
 
         {/* Mobile toggle */}
-        <div className="flex items-center gap-1 md:hidden">
+        <div className="flex items-center gap-1 lg:hidden">
           <Button
             variant="ghost"
             size="icon"
@@ -190,6 +191,7 @@ export function Navbar({ onOpenTerminal }: NavbarProps) {
             size="icon"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-expanded={mobileOpen}
+            aria-controls="mobile-portfolio-menu"
             aria-label={t(translations.nav.toggleMenuLabel)}
           >
             {mobileOpen ? (
@@ -205,10 +207,11 @@ export function Navbar({ onOpenTerminal }: NavbarProps) {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
+            id="mobile-portfolio-menu"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-border/30 bg-background/90 backdrop-blur-xl md:hidden"
+            className="overflow-hidden border-t border-border/30 bg-background/90 backdrop-blur-xl lg:hidden"
           >
             <div className="flex flex-col gap-2 px-4 py-4">
               {navLinks.map((l) => (
@@ -247,6 +250,7 @@ export function Navbar({ onOpenTerminal }: NavbarProps) {
                     toggleLightweight();
                     setMobileOpen(false);
                   }}
+                  disabled={prefersReducedMotion}
                   className={`inline-flex items-center gap-2 py-1 font-mono text-sm transition-colors hover:text-primary ${
                     isLightweight ? "text-primary font-semibold" : "text-muted-foreground"
                   }`}

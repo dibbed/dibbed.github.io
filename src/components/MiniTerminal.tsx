@@ -28,7 +28,7 @@ const QUICK_COMMANDS = ["help", "whoami", "projects", "skills", "contact"];
 export function MiniTerminal({ open, onOpenChange, onFilterProjects }: MiniTerminalProps) {
   const { t, toggleLang, lang } = useLanguage();
   const { resolvedTheme, setTheme } = useTheme();
-  const { isLightweight, toggleLightweight } = useLightweightMode();
+  const { isLightweight, prefersReducedMotion, toggleLightweight } = useLightweightMode();
 
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<string[]>([]);
@@ -41,9 +41,9 @@ export function MiniTerminal({ open, onOpenChange, onFilterProjects }: MiniTermi
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (open) {
-      setTimeout(() => inputRef.current?.focus(), 60);
-    }
+    if (!open) return;
+    const timer = setTimeout(() => inputRef.current?.focus(), 60);
+    return () => clearTimeout(timer);
   }, [open]);
 
   useEffect(() => {
@@ -148,6 +148,10 @@ export function MiniTerminal({ open, onOpenChange, onFilterProjects }: MiniTermi
         lines = [`Switched language to ${lang === "en" ? "fa" : "en"}.`];
         break;
       case "lightweight":
+        if (prefersReducedMotion) {
+          lines = ["Reduced motion is already enforced by the device settings."];
+          break;
+        }
         toggleLightweight();
         lines = [`Lightweight mode is now ${!isLightweight ? "ON" : "OFF"}.`];
         break;
