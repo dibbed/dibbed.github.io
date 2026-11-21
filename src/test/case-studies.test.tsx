@@ -3,6 +3,7 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { LanguageProvider } from "@/i18n/LanguageContext";
 import { ThemeProvider } from "@/components/theme-provider";
+import { LightweightModeProvider } from "@/hooks/use-lightweight-mode";
 import { projects } from "@/data/resume-data";
 import { caseStudies, caseStudyForSlug, caseStudyUrl, evidenceUrl } from "@/data/case-studies";
 import CaseStudyPage from "@/pages/CaseStudy";
@@ -13,6 +14,7 @@ afterEach(() => cleanup());
 function renderCase(slug: string) {
   return render(
     <ThemeProvider attribute="class" defaultTheme="dark">
+      <LightweightModeProvider>
       <LanguageProvider>
         <MemoryRouter initialEntries={[caseStudyUrl(slug)]}>
           <Routes>
@@ -20,6 +22,7 @@ function renderCase(slug: string) {
           </Routes>
         </MemoryRouter>
       </LanguageProvider>
+      </LightweightModeProvider>
     </ThemeProvider>,
   );
 }

@@ -7,6 +7,9 @@ import { Skills } from "@/components/Skills";
 import { Experience } from "@/components/Experience";
 import { Projects } from "@/components/Projects";
 import { HiringTrail } from "@/components/HiringTrail";
+import { CinematicShowcase } from "@/components/CinematicShowcase";
+import { ScrollStage } from "@/components/ScrollStage";
+import { ScrollProgress } from "@/components/ScrollProgress";
 import { Education } from "@/components/Education";
 import { Contact } from "@/components/Contact";
 import { GitHubActivity } from "@/components/GitHubActivity";
@@ -143,6 +146,7 @@ const Index = () => {
         transition={{ duration: isLightweight ? 0 : 0.45 }}
         className="relative z-10 min-h-screen pb-[calc(6rem+env(safe-area-inset-bottom,0px))] lg:pb-0"
       >
+        <ScrollProgress />
         <Navbar onOpenTerminal={openTerminal} onOpenCommandPalette={openPalette} />
         <MobileBottomNavigation
           onOpenTerminal={openTerminal}
@@ -168,18 +172,21 @@ const Index = () => {
         <MatrixRain active={matrixActive} />
         <main id="main-content" tabIndex={-1} className="relative">
           <Hero />
-          <HiringTrail />
-          <Projects
-            activeFilter={projectFilter}
-            onFilterChange={setProjectFilter}
-            searchQuery={projectSearch}
-            onSearchChange={setProjectSearch}
-          />
-          <Skills onFilterProjects={handleFilterProjectsFromMap} />
-          <Experience />
-          <GitHubActivity />
-          <Education />
-          <Contact />
+          <CinematicShowcase />
+          <ScrollStage><HiringTrail /></ScrollStage>
+          <ScrollStage>
+            <Projects
+              activeFilter={projectFilter}
+              onFilterChange={setProjectFilter}
+              searchQuery={projectSearch}
+              onSearchChange={setProjectSearch}
+            />
+          </ScrollStage>
+          <ScrollStage><Skills onFilterProjects={handleFilterProjectsFromMap} /></ScrollStage>
+          <ScrollStage><Experience /></ScrollStage>
+          <ScrollStage><GitHubActivity /></ScrollStage>
+          <ScrollStage><Education /></ScrollStage>
+          <ScrollStage><Contact /></ScrollStage>
         </main>
       </motion.div>
     </>

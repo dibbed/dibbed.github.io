@@ -11,6 +11,8 @@ import { useLanguage } from "@/i18n/LanguageContext";
 import { getResumeUrl } from "@/lib/utils";
 import { profile } from "@/data/resume-data";
 import NotFound from "@/pages/NotFound";
+import { ScrollStage } from "@/components/ScrollStage";
+import { ScrollProgress } from "@/components/ScrollProgress";
 
 function EvidenceIcon({ kind }: { kind: CaseStudy["evidence"][number]["kind"] }) {
   if (kind === "test") return <TestTubeDiagonal className="h-4 w-4" aria-hidden="true" />;
@@ -76,6 +78,7 @@ function CaseStudyContent({ item }: { item: CaseStudy }) {
 
   return (
     <div className="relative z-10 min-h-screen bg-background/40 text-foreground">
+      <ScrollProgress />
       <a href="#case-content" className="sr-only fixed left-4 top-2 z-[110] rounded-md bg-primary p-3 font-semibold text-primary-foreground focus:not-sr-only">
         {isFa ? "رفتن به محتوای اصلی" : "Skip to main content"}
       </a>
@@ -139,6 +142,7 @@ function CaseStudyContent({ item }: { item: CaseStudy }) {
           ))}
         </div>
 
+        <ScrollStage>
         <section aria-labelledby="challenge-heading" className="mt-20 grid gap-5 lg:grid-cols-2">
           <div className="min-w-0 rounded-2xl border border-border/65 bg-card/65 p-6 sm:p-8">
             <span className="font-mono text-xs text-primary">01 / WHY</span>
@@ -152,6 +156,8 @@ function CaseStudyContent({ item }: { item: CaseStudy }) {
           </div>
         </section>
 
+        </ScrollStage>
+        <ScrollStage>
         <section className="mt-10 rounded-2xl border border-border/65 bg-card/45 p-6 sm:p-8" aria-label={labels.result}>
           <div className="flex items-center gap-2 text-primary">
             <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
@@ -165,6 +171,8 @@ function CaseStudyContent({ item }: { item: CaseStudy }) {
           </div>
         </section>
 
+        </ScrollStage>
+        <ScrollStage>
         <section id="case-architecture" className="mt-20 scroll-mt-24" aria-labelledby="architecture-heading">
           <div className="mb-6 flex items-center gap-2 text-primary">
             <Braces className="h-5 w-5" aria-hidden="true" />
@@ -187,6 +195,8 @@ function CaseStudyContent({ item }: { item: CaseStudy }) {
           </p>
         </section>
 
+        </ScrollStage>
+        <ScrollStage>
         <section id="case-decisions" className="mt-20 scroll-mt-24" aria-labelledby="decisions-heading">
           <div className="mb-6 flex items-center gap-2 text-primary">
             <Code2 className="h-5 w-5" aria-hidden="true" />
@@ -210,6 +220,8 @@ function CaseStudyContent({ item }: { item: CaseStudy }) {
           </div>
         </section>
 
+        </ScrollStage>
+        <ScrollStage>
         <section id="case-evidence" className="mt-20 scroll-mt-24" aria-labelledby="evidence-heading">
           <div className="mb-6 flex items-center gap-2 text-primary">
             <FileCheck2 className="h-5 w-5" aria-hidden="true" />
@@ -232,6 +244,8 @@ function CaseStudyContent({ item }: { item: CaseStudy }) {
           </div>
         </section>
 
+        </ScrollStage>
+        <ScrollStage>
         <section className="mt-12 rounded-xl border border-amber-500/30 bg-amber-500/5 p-5 sm:p-7" aria-label={labels.constraint}>
           <div className="flex items-center gap-2 text-foreground">
             <ShieldCheck className="h-5 w-5 text-amber-500" aria-hidden="true" />
@@ -250,6 +264,7 @@ function CaseStudyContent({ item }: { item: CaseStudy }) {
           </a>
         </section>
 
+        </ScrollStage>
         <div className="mt-16 flex flex-col gap-5 rounded-2xl border border-primary/30 bg-primary/5 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
           <div className="max-w-lg">
             <p className="font-mono text-xs text-primary">{isFa ? "برای همکاری فنی" : "FOR ENGINEERING TEAMS"}</p>

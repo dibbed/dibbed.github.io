@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { Github, ArrowUpRight, Mail, ChevronDown, FileDown } from "lucide-react";
 import { profile, achievements } from "@/data/resume-data";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import { useLanguage } from "@/i18n/LanguageContext";
 import { translations } from "@/i18n/translations";
 import { getResumeUrl } from "@/lib/utils";
 import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { useCinematicMotion } from "@/hooks/use-cinematic-motion";
 
 const container = {
   hidden: {},
@@ -22,22 +24,53 @@ const fadeUp = {
 export function Hero() {
   const { t } = useLanguage();
   const { isLightweight } = useLightweightMode();
+  const { depthEnabled, motionEnabled } = useCinematicMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const smooth = useSpring(scrollYProgress, { stiffness: 155, damping: 36, mass: 0.45 });
+  const contentY = useTransform(smooth, [0, 1], [0, -90]);
+  const contentScale = useTransform(smooth, [0, 1], [1, 0.9]);
+  const contentRotateX = useTransform(smooth, [0, 1], [0, -11]);
+  const contentOpacity = useTransform(smooth, [0, 1], [1, 0.3]);
+  const lightY = useTransform(smooth, [0, 1], [0, -28]);
+  const depthRotate = useTransform(smooth, [0, 1], [-17, 24]);
 
   return (
-    <section id="hero" className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 pt-16">
+    <section ref={sectionRef} id="hero" className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 pt-16">
       {/* Ambient glowing orbs (disabled in lightweight / reduced-motion mode) */}
       {!isLightweight && (
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="animate-orb-pulse absolute left-1/2 top-1/3 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/15 blur-[140px]" />
-          <div className="animate-orb-pulse-delayed absolute left-1/3 top-2/3 h-[350px] w-[350px] rounded-full bg-accent/15 blur-[120px]" />
-          <div className="animate-orb-pulse absolute right-1/4 top-1/4 h-[250px] w-[250px] rounded-full bg-primary/10 blur-[100px]" />
+          <div className="animate-orb-pulse absolute hidden lg:block left-1/2 top-1/3 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/15 blur-[140px]" />
+          <div className="animate-orb-pulse-delayed absolute hidden lg:block left-1/3 top-2/3 h-[350px] w-[350px] rounded-full bg-accent/15 blur-[120px]" />
+          <div className="animate-orb-pulse absolute hidden lg:block right-1/4 top-1/4 h-[250px] w-[250px] rounded-full bg-primary/10 blur-[100px]" />
         </div>
+      )}
+
+      {depthEnabled && (
+        <motion.div
+          aria-hidden="true"
+          data-testid="hero-depth-orbit"
+          className="hero-depth-orbit pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden"
+          style={{ rotateY: depthRotate, transformPerspective: 1300 }}
+        >
+          <div className="hero-depth-frame hero-depth-frame-one" />
+          <div className="hero-depth-frame hero-depth-frame-two" />
+          <div className="hero-depth-frame hero-depth-frame-three" />
+        </motion.div>
       )}
 
       <motion.div
         variants={container}
         initial={isLightweight ? false : "hidden"}
         animate="show"
+        style={depthEnabled
+          ? { y: contentY, scale: contentScale, rotateX: contentRotateX, opacity: contentOpacity, transformPerspective: 1400 }
+          : motionEnabled
+            ? { y: lightY }
+            : undefined}
         className="relative z-10 mx-auto max-w-4xl text-center"
       >
         <motion.div variants={fadeUp} className="mb-4 inline-block rounded-full border border-primary/35 bg-primary/10 px-4 py-1.5">
