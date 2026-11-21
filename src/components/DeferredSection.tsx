@@ -36,7 +36,9 @@ export function DeferredSection({ id, label, minHeight, children, rootMargin = "
     if (host) observer.observe(host);
 
     // Allow non-scrolling users, screen readers and crawlers to reach the full DOM.
-    const timer = window.setTimeout(() => setLoaded(true), 6000);
+    const idleDelay = window.matchMedia("(max-width: 767px), (pointer: coarse)").matches
+      ? 18000 : 6000;
+    const timer = window.setTimeout(() => setLoaded(true), idleDelay);
     const onHashChange = () => { if (targetsSection(id)) setLoaded(true); };
     window.addEventListener("hashchange", onHashChange);
     return () => {

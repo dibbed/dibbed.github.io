@@ -48,6 +48,7 @@ for (const page of pages) {
   const url = "https://dibbed.github.io/case-studies/" + page.slug + "/";
   const title = escapeHtml(page.title);
   const desc = escapeHtml(page.description);
+  const image = "https://dibbed.github.io/og-" + page.slug + ".png";
   let html = index;
   html = setField(html, /<title>[^<]*<\/title>/, "<title>" + title + "</title>", "title");
   html = setField(html, /<link rel="canonical" href="[^"]+" \/>/, '<link rel="canonical" href="' + url + '" />', "canonical");
@@ -55,6 +56,12 @@ for (const page of pages) {
   html = setField(html, /<meta property="og:url" content="[^"]*" \/>/, '<meta property="og:url" content="' + url + '" />', "og:url");
   html = setField(html, /<meta property="og:title" content="[^"]*" \/>/, '<meta property="og:title" content="' + title + '" />', "og:title");
   html = setField(html, /<meta property="og:description" content="[^"]*" \/>/, '<meta property="og:description" content="' + desc + '" />', "og:description");
+  html = setField(html, /<meta property="og:image" content="[^"]*" \/>/,
+    '<meta property="og:image" content="' + image + '" />', "og:image");
+  html = setField(html, /<meta property="og:image:alt" content="[^"]*" \/>/,
+    '<meta property="og:image:alt" content="' + title + '" />', "og:image:alt");
+  html = setField(html, /<meta name="twitter:image" content="[^"]*" \/>/,
+    '<meta name="twitter:image" content="' + image + '" />', "twitter:image");
   html = setField(html, /<meta name="twitter:title" content="[^"]*" \/>/, '<meta name="twitter:title" content="' + title + '" />', "twitter:title");
   html = setField(html, /<meta name="twitter:description" content="[^"]*" \/>/, '<meta name="twitter:description" content="' + desc + '" />', "twitter:description");
   const directory = join(dist, "case-studies", page.slug);

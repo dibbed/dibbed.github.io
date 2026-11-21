@@ -100,11 +100,11 @@ export function MobileBottomNavigation({ onOpenTerminal, onOpenSearch }: MobileB
 
   const tabs = [
     { id: "hero" as const, icon: Home, label: t(translations.nav.home) },
-    { id: "skills" as const, icon: Code2, label: t(translations.nav.skills) },
     { id: "projects" as const, icon: FolderGit2, label: t(translations.nav.projects) },
-    { id: "experience" as const, icon: BriefcaseBusiness, label: t(translations.nav.experience) },
+    { id: "skills" as const, icon: Code2, label: t(translations.nav.skills) },
+    { id: "contact" as const, icon: Mail, label: t(translations.nav.contact) },
   ];
-  const moreSelected = moreOpen || active === "education" || active === "contact";
+  const moreSelected = moreOpen || active === "education" || active === "experience";
   const actionClass =
     "flex min-h-12 w-full items-center gap-3 rounded-xl border border-border/55 bg-card/60 px-3 py-2.5 text-start text-sm text-foreground transition-colors active:scale-[0.98] hover:border-primary/40 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50";
 
@@ -134,7 +134,7 @@ export function MobileBottomNavigation({ onOpenTerminal, onOpenSearch }: MobileB
                   (selected ? " bg-primary/10 text-primary" : " text-muted-foreground hover:bg-primary/5 hover:text-foreground")}
               >
                 <Icon aria-hidden="true" className="h-[19px] w-[19px] shrink-0" strokeWidth={selected ? 2.4 : 1.8} />
-                <span className={"max-w-full truncate text-[10px] leading-4" + (selected ? " font-bold" : " font-medium")}>
+                <span className={"max-w-full truncate text-[11px] leading-4" + (selected ? " font-bold" : " font-medium")}>
                   {label}
                 </span>
                 {selected && <span aria-hidden="true" className="absolute bottom-0.5 h-[3px] w-4 rounded-full bg-primary" />}
@@ -153,7 +153,7 @@ export function MobileBottomNavigation({ onOpenTerminal, onOpenSearch }: MobileB
               (moreSelected ? " bg-primary/10 text-primary" : " text-muted-foreground hover:bg-primary/5 hover:text-foreground")}
           >
             <Ellipsis aria-hidden="true" className="h-[19px] w-[19px]" strokeWidth={moreSelected ? 2.4 : 1.8} />
-            <span className={"text-[10px] leading-4" + (moreSelected ? " font-bold" : " font-medium")}>
+            <span className={"text-[11px] leading-4" + (moreSelected ? " font-bold" : " font-medium")}>
               {t(translations.nav.more)}
             </span>
             {moreSelected && <span aria-hidden="true" className="absolute bottom-0.5 h-[3px] w-4 rounded-full bg-primary" />}
@@ -178,9 +178,9 @@ export function MobileBottomNavigation({ onOpenTerminal, onOpenSearch }: MobileB
               <GraduationCap aria-hidden="true" className="h-[18px] w-[18px] shrink-0 text-primary" />
               {t(translations.nav.education)}
             </button>
-            <button type="button" onClick={() => goTo("contact")} className={actionClass}>
-              <Mail aria-hidden="true" className="h-[18px] w-[18px] shrink-0 text-primary" />
-              {t(translations.nav.contact)}
+            <button type="button" onClick={() => goTo("experience")} className={actionClass}>
+              <BriefcaseBusiness aria-hidden="true" className="h-[18px] w-[18px] shrink-0 text-primary" />
+              {t(translations.nav.experience)}
             </button>
             <button type="button" onClick={() => doAction(onOpenSearch)} className={actionClass}>
               <Search aria-hidden="true" className="h-[18px] w-[18px] shrink-0 text-primary" />

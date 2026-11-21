@@ -3,7 +3,7 @@ import { useLanguage } from "@/i18n/use-language";
 import { translations } from "@/i18n/translations";
 import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import { getResumeUrl } from "@/lib/utils";
-import { Command, FileDown, Languages, Moon, Sun, Terminal, Zap } from "lucide-react";
+import { Command, FileDown, Languages, Moon, Search, Sun, Terminal, Zap } from "lucide-react";
 import { useTheme } from "next-themes";
 
 interface NavbarProps {
@@ -154,14 +154,18 @@ export function Navbar({ onOpenTerminal, onOpenCommandPalette }: NavbarProps) {
 
         {/* Compact mobile header; touch navigation lives at the bottom. */}
         <div className="flex items-center gap-1 lg:hidden">
+          <Button variant="ghost" size="icon" onClick={openCommandPalette}
+            aria-label={t(translations.nav.search)} className="h-11 w-11">
+            <Search className="h-5 w-5" aria-hidden="true" />
+          </Button>
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleLang}
             aria-label={t(translations.nav.switchLangLabel)}
-            className="relative"
+            className="relative h-11 w-11"
           >
-            <Languages className="h-4 w-4" aria-hidden="true" />
+            <Languages className="h-5 w-5" aria-hidden="true" />
             <span className="absolute -bottom-0.5 -right-0.5 font-mono text-[8px] font-bold text-primary">
               {lang === "en" ? "FA" : "EN"}
             </span>
@@ -171,6 +175,7 @@ export function Navbar({ onOpenTerminal, onOpenCommandPalette }: NavbarProps) {
             size="icon"
             onClick={toggleColorTheme}
             aria-label={t(translations.nav.toggleThemeLabel)}
+            className="h-11 w-11"
           >
             <Sun
               className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"

@@ -41,7 +41,7 @@ describe("accessible mobile bottom navigation", () => {
     renderNavigation();
     const nav = screen.getByRole("navigation", { name: "Mobile navigation" });
     expect(nav.querySelectorAll("button")).toHaveLength(5);
-    for (const label of ["Home", "Skills", "Projects", "Experience", "More"]) {
+    for (const label of ["Home", "Projects", "Skills", "Contact", "More"]) {
       expect(screen.getByRole("button", { name: label })).toBeTruthy();
     }
     expect(nav.querySelector("[aria-haspopup='dialog']")).toBeTruthy();
@@ -58,6 +58,7 @@ describe("accessible mobile bottom navigation", () => {
     expect(screen.getByRole("dialog")).toBeTruthy();
     expect(screen.getByRole("button", { name: "Search" })).toBeTruthy();
     expect(screen.getByRole("button", { name: "Terminal" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Experience" })).toBeTruthy();
     expect(screen.getByRole("link", { name: /Download CV/ })).toHaveAttribute("download");
   });
 

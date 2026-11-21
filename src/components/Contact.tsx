@@ -16,7 +16,7 @@ export function Contact() {
   const { isLightweight } = useLightweightMode();
 
   return (
-    <footer id="contact" className="border-t border-border/40 px-4 py-16">
+    <footer id="contact" className="scroll-mt-24 border-t border-border/40 px-4 py-14 sm:py-16">
       <div className="mx-auto max-w-4xl text-center">
         <motion.h2
           initial={isLightweight ? false : { opacity: 0, y: 20 }}
@@ -40,7 +40,7 @@ export function Contact() {
               href={l.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 font-mono text-sm text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg px-2 font-mono text-sm text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <l.icon className="h-4 w-4" aria-hidden="true" />
               {l.label}

@@ -11,7 +11,7 @@ export function Education() {
   const { isLightweight } = useLightweightMode();
 
   return (
-    <section id="education" className="px-4 py-24">
+    <section id="education" className="scroll-mt-24 px-4 py-14 sm:py-24">
       <div className="mx-auto max-w-3xl">
         <motion.h2
           initial={isLightweight ? false : { opacity: 0, y: 20 }}

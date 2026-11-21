@@ -30,10 +30,10 @@ function ProjectHarness() {
 describe("project portfolio interactions", () => {
   it("shows three flagship systems alongside all eight other projects", () => {
     const { container } = render(<ProjectHarness />);
-    expect(container.querySelectorAll("#projects h3")).toHaveLength(11);
-    expect(screen.getByText("ComputerPilot MCP")).toBeTruthy();
-    expect(screen.getByText("TenantRAG")).toBeTruthy();
-    expect(screen.getByText("Psychology Atlas")).toBeTruthy();
+    expect(container.querySelectorAll('#projects [id^="project-"]')).toHaveLength(11);
+    expect(screen.getAllByText("ComputerPilot MCP").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("TenantRAG").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Psychology Atlas").length).toBeGreaterThan(0);
   });
 
   it("searches project names and shows an honest empty state", () => {

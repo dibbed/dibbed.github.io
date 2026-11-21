@@ -1,5 +1,8 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { ArrowUpRight } from "lucide-react";
+import { caseStudyUrl } from "@/data/case-studies";
 import { skills } from "@/data/resume-data";
 import { Badge } from "@/components/ui/badge";
 import { SpotlightCard } from "@/components/SpotlightCard";
@@ -7,6 +10,16 @@ import { useLanguage } from "@/i18n/use-language";
 import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import { translations } from "@/i18n/translations";
 
+const RELATED_WORK: Record<string, { slug: string; name: string }> = {
+  Languages: { slug: "computerpilot-mcp", name: "ComputerPilot MCP" },
+  Frameworks: { slug: "tenant-rag", name: "TenantRAG" },
+  "Automation & Telegram": { slug: "computerpilot-mcp", name: "ComputerPilot MCP" },
+  "RAG & Language Tools": { slug: "tenant-rag", name: "TenantRAG" },
+  Databases: { slug: "tenant-rag", name: "TenantRAG" },
+  Infrastructure: { slug: "computerpilot-mcp", name: "ComputerPilot MCP" },
+  Security: { slug: "tenant-rag", name: "TenantRAG" },
+  "Research & Product": { slug: "psychology-atlas", name: "Psychology Atlas" },
+};
 const SkillRadarChart = lazy(() => import("@/components/RadarChart"));
 
 const container = {
@@ -57,7 +70,7 @@ export function Skills({ onFilterProjects }: SkillsProps) {
   const { isLightweight } = useLightweightMode();
 
   return (
-    <section id="skills" className="px-4 py-24">
+    <section id="skills" className="scroll-mt-24 px-4 py-14 sm:py-24">
       <div className="mx-auto max-w-5xl">
         <motion.h2
           initial={isLightweight ? false : { opacity: 0, y: 20 }}
@@ -74,7 +87,7 @@ export function Skills({ onFilterProjects }: SkillsProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           ref={radarRef}
-          className="mx-auto mb-8 max-w-4xl"
+          className="mx-auto mb-8 hidden max-w-4xl sm:block"
         >
           <Suspense
             fallback={
@@ -107,7 +120,7 @@ export function Skills({ onFilterProjects }: SkillsProps) {
                     <Badge
                       key={sk.name}
                       variant={sk.level === "Expert" ? "default" : "secondary"}
-                      className="font-mono text-[10px]"
+                      className="font-mono text-xs leading-5"
                     >
                       {sk.name}
                       {sk.level && (
@@ -116,6 +129,14 @@ export function Skills({ onFilterProjects }: SkillsProps) {
                     </Badge>
                   ))}
                 </div>
+                {RELATED_WORK[cat.category] && (
+                  <Link to={caseStudyUrl(RELATED_WORK[cat.category].slug)}
+                    className="mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 text-xs font-semibold text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                    {lang === "fa" ? "پروژه مرتبط: " : "Related project: "}
+                    <span dir="ltr">{RELATED_WORK[cat.category].name}</span>
+                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                )}
               </SpotlightCard>
             </motion.div>
           ))}
