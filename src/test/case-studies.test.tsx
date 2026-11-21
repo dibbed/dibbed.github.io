@@ -85,8 +85,8 @@ describe("source-backed flagship case studies", () => {
       </LanguageProvider>,
     );
     const hrefs = screen.getAllByRole("link").map((link) => link.getAttribute("href"));
-    expect(hrefs).toContain("/case-studies/computerpilot-mcp");
-    expect(hrefs).toContain("/case-studies/tenant-rag#case-evidence");
-    expect(hrefs).toContain("/case-studies/psychology-atlas");
+    expect(hrefs).toContain("/case-studies/computerpilot-mcp/");
+    expect(hrefs).toContain("/case-studies/tenant-rag/#case-evidence");
+    expect(hrefs).toContain("/case-studies/psychology-atlas/");
   });
 });
