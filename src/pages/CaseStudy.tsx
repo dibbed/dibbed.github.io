@@ -272,7 +272,7 @@ function CaseStudyContent({ item }: { item: CaseStudy }) {
           <a
             href={"https://github.com/dibbed/" + item.repo + "/tree/" + item.sourceCommit}
             target="_blank" rel="noopener noreferrer"
-            className="mt-3 inline-flex min-h-10 items-center gap-2 font-mono text-xs font-medium text-primary underline underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="mt-3 inline-flex min-h-11 items-center gap-2 font-mono text-xs font-medium text-primary underline underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             dir="ltr"
           >
             <GitBranch className="h-4 w-4" aria-hidden="true" />
@@ -303,7 +303,7 @@ function CaseStudyContent({ item }: { item: CaseStudy }) {
         </Link>
       </main>
       <footer className="border-t border-border/50 py-7 text-center font-mono text-xs text-muted-foreground">
-        <Link to="/" className="text-primary underline underline-offset-4">{labels.back}</Link>
+        <Link to="/" className="inline-flex min-h-11 items-center rounded px-2 text-primary underline underline-offset-4">{labels.back}</Link>
         <span className="mx-2">·</span> Ali Khalili © {new Date().getFullYear()}
       </footer>
     </div>

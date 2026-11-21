@@ -1,5 +1,6 @@
 import { Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import { useLanguage } from "@/i18n/use-language";
+import { mustPrepareSection, PREPARE_SECTION_NAVIGATION } from "@/lib/portfolio-navigation";
 
 interface DeferredSectionProps {
   id: string;
@@ -40,31 +41,18 @@ export function DeferredSection({ id, label, minHeight, children, rootMargin = "
       ? 18000 : 6000;
     const timer = window.setTimeout(() => setLoaded(true), idleDelay);
     const onHashChange = () => { if (targetsSection(id)) setLoaded(true); };
+    const onPrepare = (event: Event) => {
+      if (mustPrepareSection(id, (event as CustomEvent<string>).detail)) setLoaded(true);
+    };
     window.addEventListener("hashchange", onHashChange);
+    window.addEventListener(PREPARE_SECTION_NAVIGATION, onPrepare);
     return () => {
       observer.disconnect();
       window.clearTimeout(timer);
       window.removeEventListener("hashchange", onHashChange);
+      window.removeEventListener(PREPARE_SECTION_NAVIGATION, onPrepare);
     };
   }, [id, loaded, rootMargin]);
-
-  // If a project anchor is requested directly, wait for its lazy chunk before scrolling.
-  useEffect(() => {
-    if (!loaded || !targetsSection(id) || !hostRef.current) return;
-    const hash = decodeURIComponent(window.location.hash.slice(1));
-    const scrollToTarget = () => {
-      const target = document.getElementById(hash);
-      if (!target || target.hasAttribute("data-deferred-placeholder")) return false;
-      target.scrollIntoView({ behavior: "auto", block: "start" });
-      return true;
-    };
-    if (scrollToTarget()) return;
-    const observer = new MutationObserver(() => {
-      if (scrollToTarget()) observer.disconnect();
-    });
-    observer.observe(hostRef.current, { childList: true, subtree: true });
-    return () => observer.disconnect();
-  }, [id, loaded]);
 
   const placeholder = (
     <section

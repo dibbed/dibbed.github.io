@@ -3,6 +3,7 @@ import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import { profile, projects } from "@/data/resume-data";
 import { getResumeUrl } from "@/lib/utils";
+import { navigateToPortfolioSection } from "@/lib/portfolio-navigation";
 import { useLanguage } from "@/i18n/use-language";
 import { translations } from "@/i18n/translations";
 import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
@@ -56,8 +57,7 @@ export function CommandPalette({ open, onOpenChange, onOpenTerminal, onSelectPro
 
   const scrollTo = (href: string) => {
     setOpen(false);
-    const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: isLightweight ? "auto" : "smooth" });
+    navigateToPortfolioSection(href.slice(1), isLightweight ? "auto" : "smooth");
   };
 
   const toggleTheme = () => {

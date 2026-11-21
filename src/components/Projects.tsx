@@ -136,7 +136,7 @@ export function Projects({
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder={t(translations.projects.searchPlaceholder)}
               aria-label={t(translations.projects.searchPlaceholder)}
-              className="h-11 w-full rounded-md border border-border/60 bg-background/60 pl-9 pr-9 text-base md:h-9 md:text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rtl:pl-8 rtl:pr-8"
+              className="h-11 w-full rounded-md border border-border/60 bg-background/60 pl-9 pr-9 text-base lg:h-9 lg:text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rtl:pl-8 rtl:pr-8"
             />
             {isFiltered && (
               <button
@@ -264,7 +264,7 @@ export function Projects({
                           onClick={() => void copyProjectLink(p.name)}
                           aria-label={t(translations.projects.copyLink) + ": " + p.name}
                           title={t(translations.projects.copyLink)}
-                          className="mt-1 inline-flex min-h-10 items-center gap-1.5 rounded-md px-2 font-mono text-xs font-medium text-primary transition-colors active:scale-[0.98] hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:mt-2 sm:min-h-0 sm:px-0 sm:text-[11px]"
+                          className="mt-1 inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 font-mono text-xs font-medium text-primary transition-colors active:scale-[0.98] hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:mt-2 lg:min-h-0 sm:px-0 sm:text-[11px]"
                         >
                           <Link2 className="h-3.5 w-3.5" aria-hidden="true" />
                           {t(translations.projects.copyLink)}
@@ -365,7 +365,7 @@ export function Projects({
                     <div className="flex flex-wrap items-center gap-3">
                       {caseStudies.filter((caseStudy) => caseStudy.projectName === p.name).map((caseStudy) => (
                         <Link key={caseStudy.slug} to={caseStudyUrl(caseStudy.slug)}
-                          className="inline-flex min-h-10 items-center gap-1.5 rounded-md px-2 font-mono text-xs font-semibold text-primary underline underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                          className="inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 font-mono text-xs font-semibold text-primary underline underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                           {lang === "fa" ? "جزئیات مهندسی" : "Full case study"}
                           <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
                         </Link>
@@ -383,7 +383,7 @@ export function Projects({
                         onClick={() => void copyProjectLink(p.name)}
                         aria-label={t(translations.projects.copyLink) + ": " + p.name}
                         title={t(translations.projects.copyLink)}
-                        className="mt-1 inline-flex min-h-10 items-center gap-1.5 rounded-md px-2 font-mono text-xs font-medium text-primary transition-colors active:scale-[0.98] hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:mt-2 sm:min-h-0 sm:px-0 sm:text-[11px]"
+                        className="mt-1 inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 font-mono text-xs font-medium text-primary transition-colors active:scale-[0.98] hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:mt-2 lg:min-h-0 sm:px-0 sm:text-[11px]"
                       >
                         <Link2 className="h-3.5 w-3.5" aria-hidden="true" />
                         {t(translations.projects.copyLink)}

@@ -24,7 +24,7 @@ export function ArchitectureLauncher({ data, projectName, terminalPreview, caseS
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex min-h-10 items-center rounded-lg px-2 font-mono text-xs font-semibold text-primary underline underline-offset-2 transition-colors active:scale-[0.98] hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:min-h-0 sm:px-0 sm:font-medium"
+        className="inline-flex min-h-11 items-center rounded-lg px-2 font-mono text-xs font-semibold text-primary underline underline-offset-2 transition-colors active:scale-[0.98] hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary lg:min-h-0 sm:px-0 sm:font-medium"
       >
         {t(translations.architecture.viewArchitecture)}
       </button>
