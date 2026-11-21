@@ -47,9 +47,9 @@ export function CommandPalette({ open, onOpenChange, onOpenTerminal, onSelectPro
 
   const navItems = [
     { label: t(translations.nav.home), href: "#hero", icon: Home },
+    { label: t(translations.nav.projects), href: "#projects", icon: FolderGit2 },
     { label: t(translations.nav.skills), href: "#skills", icon: Code2 },
     { label: t(translations.nav.experience), href: "#experience", icon: Briefcase },
-    { label: t(translations.nav.projects), href: "#projects", icon: FolderGit2 },
     { label: t(translations.nav.education), href: "#education", icon: GraduationCap },
     { label: t(translations.nav.contact), href: "#contact", icon: Mail },
   ];

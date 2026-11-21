@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Github, Send, Mail, ChevronDown, FileDown } from "lucide-react";
+import { Github, ArrowUpRight, Mail, ChevronDown, FileDown } from "lucide-react";
 import { profile, achievements } from "@/data/resume-data";
 import { Button } from "@/components/ui/button";
 import { TypewriterText } from "@/components/TypewriterText";
@@ -70,26 +70,29 @@ export function Hero() {
           ))}
         </motion.div>
 
-        {/* Links */}
+        {/* Employer-first: links to real evidence, code and contact. */}
         <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center gap-3" dir="ltr">
-          <Button variant="outline" asChild className="gap-2 border-border/60 bg-card/50 font-mono backdrop-blur-sm hover:border-primary/50 hover:bg-primary/5">
-            <a href={`https://${profile.github}`} target="_blank" rel="noopener noreferrer">
+          <Button asChild className="min-h-11 gap-2 font-mono text-xs sm:text-sm">
+            <a href="#projects">
+              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              {t(translations.hero.exploreWork)}
+            </a>
+          </Button>
+          <Button asChild variant="outline" className="min-h-11 gap-2 border-border/60 bg-card/50 font-mono text-xs backdrop-blur-sm hover:border-primary/50 hover:bg-primary/5 sm:text-sm">
+            <a href={getResumeUrl()} download>
+              <FileDown className="h-4 w-4" aria-hidden="true" />
+              {t(translations.hero.downloadCv)}
+            </a>
+          </Button>
+          <Button variant="outline" asChild className="min-h-11 gap-2 border-border/60 bg-card/50 font-mono text-xs backdrop-blur-sm hover:border-primary/50 hover:bg-primary/5 sm:text-sm">
+            <a href={"https://" + profile.github} target="_blank" rel="noopener noreferrer">
               <Github className="h-4 w-4" aria-hidden="true" /> GitHub
             </a>
           </Button>
-          <Button variant="outline" asChild className="gap-2 border-border/60 bg-card/50 font-mono backdrop-blur-sm hover:border-primary/50 hover:bg-primary/5">
-            <a href={`https://${profile.telegram}`} target="_blank" rel="noopener noreferrer">
-              <Send className="h-4 w-4" aria-hidden="true" /> Telegram
-            </a>
-          </Button>
-          <Button variant="outline" asChild className="gap-2 border-border/60 bg-card/50 font-mono backdrop-blur-sm hover:border-primary/50 hover:bg-primary/5">
-            <a href={`mailto:${profile.email}`}>
-              <Mail className="h-4 w-4" aria-hidden="true" /> Email
-            </a>
-          </Button>
-          <Button asChild className="gap-2 font-mono">
-            <a href={getResumeUrl()} download>
-              <FileDown className="h-4 w-4" aria-hidden="true" /> {t(translations.hero.downloadCv)}
+          <Button variant="outline" asChild className="min-h-11 gap-2 border-border/60 bg-card/50 font-mono text-xs backdrop-blur-sm hover:border-primary/50 hover:bg-primary/5 sm:text-sm">
+            <a href={"mailto:" + profile.email}>
+              <Mail className="h-4 w-4" aria-hidden="true" />
+              {t(translations.hero.contactMe)}
             </a>
           </Button>
         </motion.div>
@@ -100,7 +103,7 @@ export function Hero() {
         initial={isLightweight ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
-        className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2"
+        className="absolute bottom-24 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 lg:bottom-8"
       >
         <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
           {t(translations.hero.scroll)}

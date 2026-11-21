@@ -1,4 +1,6 @@
 import { useMemo } from "react";
+import { Link } from "react-router-dom";
+import { caseStudies, caseStudyUrl } from "@/data/case-studies";
 import { motion } from "framer-motion";
 import { Github, ExternalLink, Search, Sparkles, X, CheckCircle2, Link2 } from "lucide-react";
 import { projects } from "@/data/resume-data";
@@ -186,6 +188,19 @@ export function Projects({
                       <p className="text-sm leading-6 text-muted-foreground sm:text-xs sm:leading-relaxed">
                         {lang === "fa" && p.descriptionFa ? p.descriptionFa : p.description}
                       </p>
+                      {caseStudies.filter((caseStudy) => caseStudy.projectName === p.name).map((caseStudy) => (
+                        <div key={caseStudy.slug} className="rounded-xl border border-primary/20 bg-primary/5 p-3.5">
+                          <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-primary">
+                            {lang === "fa" ? "چالش مهندسی" : "ENGINEERING CHALLENGE"}
+                          </p>
+                          <p className="mt-2 text-sm font-semibold leading-6 text-foreground">
+                            {caseStudy.headline[lang]}
+                          </p>
+                          <p className="mt-2 text-xs leading-6 text-muted-foreground">
+                            {caseStudy.honestLimit[lang]}
+                          </p>
+                        </div>
+                      ))}
 
                       {(lang === "fa" ? p.highlightsFa : p.highlights) && (
                         <ul className="space-y-1.5 border-t border-border/40 pt-3">
@@ -212,6 +227,16 @@ export function Projects({
                       </div>
 
                       <div className="flex flex-wrap items-center gap-3 border-t border-border/40 pt-2">
+                        {caseStudies.filter((caseStudy) => caseStudy.projectName === p.name).map((caseStudy) => (
+                          <Link
+                            key={caseStudy.slug}
+                            to={caseStudyUrl(caseStudy.slug)}
+                            className="inline-flex min-h-11 w-full items-center justify-between gap-2 rounded-lg bg-primary px-4 font-mono text-xs font-bold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                          >
+                            <span>{lang === "fa" ? "بررسی کامل نمونه‌کار" : "Explore full case study"}</span>
+                            <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
+                          </Link>
+                        ))}
                         {p.architecture && (
                           <ArchitectureLauncher
                             data={p.architecture}
@@ -324,6 +349,13 @@ export function Projects({
                       ))}
                     </div>
                     <div className="flex flex-wrap items-center gap-3">
+                      {caseStudies.filter((caseStudy) => caseStudy.projectName === p.name).map((caseStudy) => (
+                        <Link key={caseStudy.slug} to={caseStudyUrl(caseStudy.slug)}
+                          className="inline-flex min-h-10 items-center gap-1.5 rounded-md px-2 font-mono text-xs font-semibold text-primary underline underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                          {lang === "fa" ? "جزئیات مهندسی" : "Full case study"}
+                          <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+                        </Link>
+                      ))}
                       {p.architecture && (
                         <ArchitectureLauncher
                           data={p.architecture}

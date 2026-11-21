@@ -12,7 +12,7 @@ import { translations } from "@/i18n/translations";
 import { getResumeUrl } from "@/lib/utils";
 
 type SectionId = "hero" | "skills" | "experience" | "projects" | "education" | "contact";
-const SECTION_IDS: SectionId[] = ["hero", "skills", "experience", "projects", "education", "contact"];
+const SECTION_IDS: SectionId[] = ["hero", "projects", "skills", "experience", "education", "contact"];
 
 interface MobileBottomNavigationProps {
   onOpenTerminal: () => void;

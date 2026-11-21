@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { useState } from "react";
+import { MemoryRouter } from "react-router-dom";
 import { Projects } from "@/components/Projects";
 import { LanguageProvider } from "@/i18n/LanguageContext";
 import { LightweightModeProvider } from "@/hooks/use-lightweight-mode";
@@ -13,12 +14,14 @@ function ProjectHarness() {
   return (
     <LightweightModeProvider>
       <LanguageProvider>
+        <MemoryRouter>
         <Projects
           activeFilter={area}
           onFilterChange={setArea}
           searchQuery={query}
           onSearchChange={setQuery}
         />
+        </MemoryRouter>
       </LanguageProvider>
     </LightweightModeProvider>
   );

@@ -33,11 +33,13 @@ export const translations = {
     terminalShort: { en: "Terminal", fa: "ترمینال" },
   },
   hero: {
-    badge: { en: "// BACKEND & AUTOMATION", fa: "// بک‌اند و اتوماسیون" },
+    badge: { en: "// PYTHON BACKEND / AUTOMATION / SYSTEMS", fa: "// بک‌اند پایتون / اتوماسیون / سیستم‌ها" },
     subtitle: {
-      en: "Python backend, developer automation and systems tooling. Building useful software at the intersection of engineering and learning.",
-      fa: "توسعه بک‌اند پایتون، اتوماسیون و ابزارهای سیستمی، با علاقه به پیوند مهندسی نرم‌افزار و یادگیری.",
+      en: "I build Python backend services and automation systems that handle uncertain failures, protect tenant data and keep engineering claims testable. Explore the architecture, trade-offs and source evidence behind three flagship projects.",
+      fa: "بک‌اند پایتون و سیستم‌های اتوماسیون می‌سازم؛ با تمرکز بر بازیابی پس از خطا، مرز دسترسی داده‌ها و مهندسی قابل بررسی. معماری، تصمیم‌های فنی و شواهد واقعی سه پروژه اصلی را ببین.",
     },
+    exploreWork: { en: "Explore Case Studies", fa: "مشاهده نمونه‌کارهای اصلی" },
+    contactMe: { en: "Contact", fa: "ارتباط" },
     downloadCv: { en: "Download CV", fa: "دانلود رزومه" },
     scroll: { en: "Scroll", fa: "اسکرول" },
   },
@@ -166,5 +168,6 @@ export const translations = {
     "Supported OS Targets": { en: "OS Targets", fa: "سیستم‌عامل" },
     "Chemistry Elements": { en: "Elements", fa: "عنصر شیمیایی" },
     "Featured Projects": { en: "Featured Projects", fa: "پروژه منتخب" },
+    "Case Studies": { en: "Case Studies", fa: "مطالعه موردی" },
   } as Record<string, { en: string; fa: string }>,
 } as const;

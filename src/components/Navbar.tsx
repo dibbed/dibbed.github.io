@@ -18,9 +18,9 @@ export function Navbar({ onOpenTerminal, onOpenCommandPalette }: NavbarProps) {
 
   const navLinks = [
     { label: t(translations.nav.home), href: "#hero" },
+    { label: t(translations.nav.projects), href: "#projects" },
     { label: t(translations.nav.skills), href: "#skills" },
     { label: t(translations.nav.experience), href: "#experience" },
-    { label: t(translations.nav.projects), href: "#projects" },
     { label: t(translations.nav.education), href: "#education" },
     { label: t(translations.nav.contact), href: "#contact" },
   ];

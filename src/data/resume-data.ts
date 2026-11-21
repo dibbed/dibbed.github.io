@@ -130,8 +130,8 @@ export const achievements: Achievement[] = [
     value: "118",
   },
   {
-    label: "Featured Projects",
-    value: "11",
+    label: "Case Studies",
+    value: "3",
   },
 ];
 
