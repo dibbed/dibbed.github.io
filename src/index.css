@@ -209,3 +209,24 @@ html.lightweight-mode *::after {
   animation-iteration-count: 1 !important;
   transition-duration: 0.01ms !important;
 }
+
+/* Fixed navigation must never obscure a target heading. */
+#hero, #skills, #experience, #projects, #education, #contact {
+  scroll-margin-top: 76px;
+}
+@media (max-width: 1023px) {
+  #mobile-bottom-nav {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+
+/* Swipeable project focus chips on mobile, without layout overflow. */
+.mobile-filter-rail {
+  scrollbar-width: none;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.mobile-filter-rail::-webkit-scrollbar {
+  display: none;
+}

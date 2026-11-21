@@ -1,14 +1,13 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, lazy, Suspense } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
+import { MobileBottomNavigation } from "@/components/MobileBottomNavigation";
 import { Hero } from "@/components/Hero";
 import { Skills } from "@/components/Skills";
 import { Experience } from "@/components/Experience";
 import { Projects } from "@/components/Projects";
 import { Education } from "@/components/Education";
 import { Contact } from "@/components/Contact";
-import { CommandPalette } from "@/components/CommandPalette";
-import { MiniTerminal } from "@/components/MiniTerminal";
 import { GitHubActivity } from "@/components/GitHubActivity";
 import { MatrixRain } from "@/components/MatrixRain";
 import { BootSequence } from "@/components/BootSequence";
@@ -16,6 +15,12 @@ import { useKonamiCode } from "@/hooks/use-konami-code";
 import { useLightweightMode } from "@/hooks/use-lightweight-mode";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { translations } from "@/i18n/translations";
+import { projectAnchor } from "@/lib/project-links";
+import { projects } from "@/data/resume-data";
+
+// Command UIs and their dependencies are loaded only on first use.
+const CommandPalette = lazy(() => import("@/components/CommandPalette").then((m) => ({ default: m.CommandPalette })));
+const MiniTerminal = lazy(() => import("@/components/MiniTerminal").then((m) => ({ default: m.MiniTerminal })));
 
 const BOOT_STORAGE_KEY = "portfolio-boot-seen";
 
@@ -36,6 +41,18 @@ const Index = () => {
   const [projectFilter, setProjectFilter] = useState<string>("All");
   const [projectSearch, setProjectSearch] = useState<string>("");
   const [terminalOpen, setTerminalOpen] = useState(false);
+  const [terminalLoaded, setTerminalLoaded] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [paletteLoaded, setPaletteLoaded] = useState(false);
+
+  const openTerminal = useCallback(() => {
+    setTerminalLoaded(true);
+    setTerminalOpen(true);
+  }, []);
+  const openPalette = useCallback(() => {
+    setPaletteLoaded(true);
+    setPaletteOpen(true);
+  }, []);
 
   const handleBootComplete = useCallback(() => {
     try {
@@ -53,10 +70,26 @@ const Index = () => {
   }, [isLightweight, booted, handleBootComplete]);
 
   useEffect(() => {
+    if (!booted || !window.location.hash.startsWith("#project-")) return;
+    const anchor = decodeURIComponent(window.location.hash.slice(1));
+    if (!projects.some((project) => projectAnchor(project.name) === anchor)) return;
+    // Let React mount its cards, then restore the anchored view after the intro.
+    const frame = window.requestAnimationFrame(() =>
+      document.getElementById(anchor)?.scrollIntoView({ behavior: "auto", block: "start" })
+    );
+    return () => window.cancelAnimationFrame(frame);
+  }, [booted]);
+
+  useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "`") {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        setTerminalOpen((prev) => !prev);
+        setPaletteLoaded(true);
+        setPaletteOpen((current) => !current);
+      } else if ((e.ctrlKey || e.metaKey) && e.key === "`") {
+        e.preventDefault();
+        setTerminalLoaded(true);
+        setTerminalOpen((current) => !current);
       }
     };
     window.addEventListener("keydown", onKeyDown);
@@ -105,18 +138,30 @@ const Index = () => {
         initial={isLightweight ? false : { opacity: 0 }}
         animate={{ opacity: booted ? 1 : 0 }}
         transition={{ duration: isLightweight ? 0 : 0.45 }}
-        className="relative z-10 min-h-screen"
+        className="relative z-10 min-h-screen pb-[calc(6rem+env(safe-area-inset-bottom,0px))] lg:pb-0"
       >
-        <Navbar onOpenTerminal={() => setTerminalOpen(true)} />
-        <CommandPalette
-          onOpenTerminal={() => setTerminalOpen(true)}
-          onSelectProject={handleSelectProjectFromPalette}
+        <Navbar onOpenTerminal={openTerminal} onOpenCommandPalette={openPalette} />
+        <MobileBottomNavigation
+          onOpenTerminal={openTerminal}
+          onOpenSearch={openPalette}
         />
-        <MiniTerminal
-          open={terminalOpen}
-          onOpenChange={setTerminalOpen}
-          onFilterProjects={handleFilterProjectsFromMap}
-        />
+        <Suspense fallback={null}>
+          {paletteLoaded && (
+            <CommandPalette
+              open={paletteOpen}
+              onOpenChange={setPaletteOpen}
+              onOpenTerminal={openTerminal}
+              onSelectProject={handleSelectProjectFromPalette}
+            />
+          )}
+          {terminalLoaded && (
+            <MiniTerminal
+              open={terminalOpen}
+              onOpenChange={setTerminalOpen}
+              onFilterProjects={handleFilterProjectsFromMap}
+            />
+          )}
+        </Suspense>
         <MatrixRain active={matrixActive} />
         <main id="main-content" tabIndex={-1} className="relative">
           <Hero />
