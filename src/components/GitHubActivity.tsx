@@ -1,17 +1,44 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
+import { RefreshCw } from "lucide-react";
 import { SpotlightCard } from "@/components/SpotlightCard";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { translations } from "@/i18n/translations";
+import { translations, type Lang } from "@/i18n/translations";
 
 interface GitHubEvent {
   repo: string;
+  repoUrl: string;
   message: string;
   date: string;
 }
 
-function relativeTime(dateStr: string): string {
+interface RawGitHubEvent {
+  type?: string;
+  created_at?: string;
+  repo?: { name?: string };
+  payload?: {
+    ref?: string;
+    head?: string;
+    commits?: Array<{ message?: string }>;
+  };
+}
+
+interface RawGitHubRepo {
+  full_name?: string;
+  html_url?: string;
+  description?: string | null;
+  pushed_at?: string;
+  fork?: boolean;
+}
+
+function relativeTime(dateStr: string, lang: Lang): string {
   const seconds = Math.max(0, Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000));
+  if (lang === "fa") {
+    if (seconds < 60) return "همین الان";
+    if (seconds < 3600) return `${Math.floor(seconds / 60)} دقیقه پیش`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)} ساعت پیش`;
+    return `${Math.floor(seconds / 86400)} روز پیش`;
+  }
   if (seconds < 60) return `${seconds}s ago`;
   if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
   if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
@@ -20,35 +47,99 @@ function relativeTime(dateStr: string): string {
 
 export function GitHubActivity() {
   const [events, setEvents] = useState<GitHubEvent[]>([]);
+  const [sourceMode, setSourceMode] = useState<"events" | "repos">("events");
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [tick, setTick] = useState(0);
   const { t, lang } = useLanguage();
 
+  const fetchActivity = useCallback(async (signal?: AbortSignal, isManual = false) => {
+    if (isManual) setRefreshing(true);
+    try {
+      const response = await fetch(
+        "https://api.github.com/users/dibbed/events/public?per_page=50",
+        { signal }
+      );
+      if (response.ok) {
+        const data: unknown = await response.json();
+        if (Array.isArray(data)) {
+          const parsed: GitHubEvent[] = (data as RawGitHubEvent[])
+            .filter((event) => event.type === "PushEvent" && event.repo?.name && event.created_at)
+            .sort(
+              (a, b) =>
+                new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime()
+            )
+            .slice(0, 5)
+            .map((event) => {
+              const repoName = event.repo!.name!;
+              const rawMsg =
+                event.payload?.commits?.[0]?.message ||
+                `Push to ${String(event.payload?.ref || "branch").replace("refs/heads/", "")} (${String(event.payload?.head || "").slice(0, 7)})`;
+              return {
+                repo: repoName,
+                repoUrl: `https://github.com/${repoName}`,
+                message: rawMsg.split("\n")[0].slice(0, 70),
+                date: event.created_at!,
+              };
+            });
+
+          if (parsed.length > 0) {
+            setEvents(parsed);
+            setSourceMode("events");
+            return;
+          }
+        }
+      }
+
+      // Live fallback to recently pushed public repositories (GitHub Events API only keeps 90 days).
+      const reposRes = await fetch(
+        "https://api.github.com/users/dibbed/repos?sort=pushed&per_page=5",
+        { signal }
+      );
+      if (reposRes.ok) {
+        const reposData: unknown = await reposRes.json();
+        if (Array.isArray(reposData)) {
+          const parsedRepos: GitHubEvent[] = (reposData as RawGitHubRepo[])
+            .filter((r) => r.full_name && r.pushed_at)
+            .slice(0, 5)
+            .map((r) => ({
+              repo: r.full_name!,
+              repoUrl: r.html_url || `https://github.com/${r.full_name}`,
+              message: (r.description || "Updated repository").slice(0, 70),
+              date: r.pushed_at!,
+            }));
+          if (parsedRepos.length > 0) {
+            setEvents(parsedRepos);
+            setSourceMode("repos");
+          }
+        }
+      }
+    } catch {
+      // Never render fabricated fallback activity.
+    } finally {
+      if (!signal?.aborted) {
+        setLoading(false);
+        setRefreshing(false);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     const controller = new AbortController();
-    fetch("https://api.github.com/users/dibbed/events/public?per_page=50", { signal: controller.signal })
-      .then((response) => {
-        if (!response.ok) throw new Error("GitHub activity unavailable");
-        return response.json();
-      })
-      .then((data: unknown) => {
-        if (!Array.isArray(data)) throw new Error("Invalid GitHub response");
-        const parsed: GitHubEvent[] = data
-          .filter((event) => event.type === "PushEvent" && event.repo?.name && event.created_at)
-          .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-          .slice(0, 5)
-          .map((event) => ({
-            repo: event.repo.name,
-            message: String(event.payload?.commits?.[0]?.message || `Push to ${String(event.payload?.ref || "branch").replace("refs/heads/", "")} (${String(event.payload?.head || "").slice(0, 7)})`)
-              .split("\n")[0].slice(0, 70),
-            date: event.created_at,
-          }));
-        setEvents(parsed);
-      })
-      .catch(() => { /* Never render fabricated fallback activity. */ })
-      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
-    return () => controller.abort();
-  }, []);
+    void fetchActivity(controller.signal);
+
+    // Periodic refresh every 5 minutes when tab is visible.
+    const pollInterval = setInterval(() => {
+      if (!document.hidden) {
+        void fetchActivity(controller.signal);
+      }
+    }, 5 * 60_000);
+
+    return () => {
+      controller.abort();
+      clearInterval(pollInterval);
+    };
+  }, [fetchActivity]);
 
   useEffect(() => {
     const interval = setInterval(() => setTick((value) => value + 1), 60_000);
@@ -56,8 +147,8 @@ export function GitHubActivity() {
   }, []);
 
   const displayEvents = useMemo(
-    () => events.map((event) => ({ ...event, time: relativeTime(event.date) })),
-    [events, tick]
+    () => events.map((event) => ({ ...event, time: relativeTime(event.date, lang) })),
+    [events, tick, lang]
   );
 
   return (
@@ -65,15 +156,32 @@ export function GitHubActivity() {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.45 }}
       className="mx-auto mt-16 max-w-2xl px-4"
     >
       <SpotlightCard className="p-4">
-        <div className="mb-3 flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-          <span className="font-mono text-xs uppercase tracking-widest text-primary">
-            {t(translations.activity.header)}
-          </span>
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <div className="h-2 w-2 rounded-full bg-primary animate-pulse" aria-hidden="true" />
+            <span className="font-mono text-xs uppercase tracking-widest text-primary">
+              {t(translations.activity.header)}
+            </span>
+            {sourceMode === "repos" && displayEvents.length > 0 && (
+              <span className="hidden text-[10px] text-muted-foreground sm:inline">
+                · {t(translations.activity.recentReposFallback)}
+              </span>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => void fetchActivity(undefined, true)}
+            disabled={refreshing}
+            aria-label={t(translations.activity.refreshLabel)}
+            title={t(translations.activity.refreshLabel)}
+            className="rounded p-1 text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} aria-hidden="true" />
+          </button>
         </div>
 
         {loading ? (
@@ -81,18 +189,32 @@ export function GitHubActivity() {
             {t(translations.activity.scanning)}
           </div>
         ) : displayEvents.length === 0 ? (
-          <a href="https://github.com/dibbed" target="_blank" rel="noopener noreferrer"
-            className="font-mono text-[11px] text-muted-foreground underline underline-offset-2 hover:text-primary">
-            {lang === "fa" ? "فعالیت عمومی در دسترس نیست؛ مشاهده GitHub" : "Public activity unavailable. View GitHub profile."}
+          <a
+            href="https://github.com/dibbed"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-mono text-[11px] text-muted-foreground underline underline-offset-2 hover:text-primary"
+          >
+            {t(translations.activity.unavailable)}
           </a>
         ) : (
           <div className="space-y-1.5" dir="ltr">
             {displayEvents.map((event, index) => (
-              <div key={index} className="flex items-start gap-2 font-mono text-[11px] text-muted-foreground text-left">
-                <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-primary/60" />
-                <span className="text-primary/90 shrink-0">{event.repo}</span>
-                <span className="truncate flex-1 opacity-70">— {event.message}</span>
-                <span className="shrink-0 text-muted-foreground/50">[{event.time}]</span>
+              <div
+                key={`${event.repo}-${event.date}-${index}`}
+                className="flex items-start gap-2 text-left font-mono text-[11px] text-muted-foreground"
+              >
+                <span aria-hidden="true" className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary/70" />
+                <a
+                  href={event.repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 font-medium text-primary hover:underline"
+                >
+                  {event.repo}
+                </a>
+                <span className="flex-1 truncate opacity-80">— {event.message}</span>
+                <span className="shrink-0 text-muted-foreground/75">[{event.time}]</span>
               </div>
             ))}
           </div>
