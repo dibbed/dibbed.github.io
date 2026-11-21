@@ -160,10 +160,12 @@ for title, content in [
     txt(p, M, y, title, 8.25, bold=True, color=ACCENT)
     y = paragraph(p, content, M+122, y, max_width=R-(M+122), size=8.8, leading=11.7)+10
 y = section(p, "Education", y+2)
-txt(p, M, y, "Psychology studies (in progress)", 9.7, bold=True)
-txt(p, M, y+14, "Islamic Azad University, Gorgan", 8.9, color=MUTED)
-txt(p, M, y+34, "Software engineering: independent study and public project work", 8.9)
-lang_y = section(p, "Languages", y+62)
+txt(p, M, y, "Bachelor's in Psychology (in progress)", 9.7, bold=True)
+txt(p, M, y+14, "Islamic Azad University, Gorgan  |  Currently studying", 8.9, color=MUTED)
+txt(p, M, y+36, "Associate Degree in Computer Studies (completed)", 9.7, bold=True)
+txt(p, M, y+50, "Islamic Azad University, Gorgan", 8.9, color=MUTED)
+txt(p, M, y+72, "Further software engineering learning through independent project work", 8.5, color=MUTED)
+lang_y = section(p, "Languages", y+104)
 txt(p, M, lang_y, "Persian: native", 9.2)
 txt(p, M+158, lang_y, "English: technical documentation and communication", 9.2)
 if lang_y+15 > H-47:
