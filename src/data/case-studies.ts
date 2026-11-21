@@ -279,7 +279,7 @@ export function caseStudyForSlug(slug: string): CaseStudy | undefined {
 }
 
 export function caseStudyUrl(slug: string): string {
-  return "/case-studies/" + slug;
+  return "/case-studies/" + slug + "/";
 }
 
 export function evidenceUrl(study: CaseStudy, path: string): string {

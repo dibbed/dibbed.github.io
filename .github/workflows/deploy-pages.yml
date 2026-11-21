@@ -50,6 +50,13 @@ jobs:
           test -f dist/404.html
           test -f dist/og-card.png
           test -f dist/resume.pdf
+          for project in computerpilot-mcp tenant-rag psychology-atlas; do
+            test -f "dist/case-studies/$project/index.html"
+            grep -Fq "https://dibbed.github.io/case-studies/$project/" "dist/case-studies/$project/index.html"
+            grep -Eq 'src="/assets/' "dist/case-studies/$project/index.html"
+          done
+          test -f dist/sitemap.xml
+          test -f dist/robots.txt
 
       - name: Setup Pages
         if: github.event_name == 'push'
