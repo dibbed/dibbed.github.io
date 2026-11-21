@@ -39,7 +39,7 @@ function StoryCard({
         aria-hidden={!active}
         onClick={!active ? () => onSelect(index) : undefined}
         style={{ x, z, rotateY, rotateX, scale, opacity, zIndex, transformPerspective: 1150, transformStyle: "preserve-3d" }}
-        className={"pointer-events-auto relative flex " + (!active ? "cursor-pointer " : "") + "h-[min(460px,62dvh)] w-[min(440px,44vw)] min-w-[350px] flex-col justify-between overflow-hidden rounded-[28px] border border-primary/30 bg-gradient-to-br from-card via-card to-emerald-950/15 p-7 shadow-[0_36px_100px_-45px_rgba(1,14,13,0.85)] ring-1 ring-white/5 dark:from-[#0b121b] dark:via-[#0b141c] dark:to-[#09221e]"}
+        className={"pointer-events-auto relative flex " + (!active ? "cursor-pointer " : "") + "h-auto min-h-[min(460px,62dvh)] w-[min(440px,44vw)] min-w-[350px] flex-col justify-between overflow-hidden rounded-[28px] border border-primary/30 bg-gradient-to-br from-card via-card to-emerald-950/15 p-7 shadow-[0_36px_100px_-45px_rgba(1,14,13,0.85)] ring-1 ring-white/5 dark:from-[#0b121b] dark:via-[#0b141c] dark:to-[#09221e]"}
       >
         <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full border border-primary/15 bg-primary/5 shadow-[0_0_100px_20px_rgba(16,185,129,0.09)]" />
         <div className="relative flex items-start justify-between gap-4">
@@ -163,13 +163,13 @@ export function CinematicShowcase() {
             <div className="absolute left-1/2 top-[48%] h-[630px] w-[630px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/10" />
             <div className="absolute inset-x-0 top-[50%] h-px bg-gradient-to-r from-transparent via-primary/15 to-transparent" />
           </div>
-          <div className="relative z-10 mx-auto flex w-full max-w-6xl items-start justify-between gap-7 px-8 pt-7">
+          <div className="relative z-10 mx-auto flex w-full max-w-6xl items-start justify-between gap-7 px-8 pt-7 [@media(max-height:840px)]:pt-3">
             <div>
               <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.23em] text-primary">
                 {lang === "fa" ? "فصل‌های مهندسی / ۰۱ تا ۰۳" : "ENGINEERING STORIES / 01—03"}
               </p>
-              <h2 className="mt-3 max-w-xl text-2xl font-bold tracking-tight text-foreground lg:text-3xl">{stageHeading}</h2>
-              <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">{stageSubline}</p>
+              <h2 className="mt-3 max-w-xl text-2xl font-bold tracking-tight text-foreground lg:text-3xl [@media(max-height:840px)]:text-xl">{stageHeading}</h2>
+              <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground [@media(max-height:840px)]:hidden">{stageSubline}</p>
             </div>
             <div className="shrink-0 pt-5 text-end font-mono text-[10px] tracking-widest text-muted-foreground" dir="ltr">
               <span className="block text-xl font-bold text-primary">0{active + 1}<span className="text-sm text-muted-foreground"> / 03</span></span>
@@ -183,7 +183,7 @@ export function CinematicShowcase() {
             ))}
           </div>
 
-          <div className="relative z-20 mx-auto mb-10 flex max-w-full items-center gap-3 rounded-full border border-border/60 bg-background/85 px-5 py-3 shadow-lg backdrop-blur-xl" role="group" aria-label={lang === "fa" ? "انتخاب فصل پروژه" : "Select a project chapter"}>
+          <div className="relative z-20 mx-auto mb-6 flex max-w-full items-center gap-3 rounded-full [@media(max-height:840px)]:mb-4 border border-border/60 bg-background/85 px-5 py-3 shadow-lg backdrop-blur-xl" role="group" aria-label={lang === "fa" ? "انتخاب فصل پروژه" : "Select a project chapter"}>
             {caseStudies.map((study, index) => (
               <button
                 key={study.slug}

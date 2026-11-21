@@ -69,6 +69,13 @@ describe("cinematic scroll chapters without scroll hijacking", () => {
     const { container } = renderShowcase();
     expect(container.querySelector("#depth-showcase")?.getAttribute("data-cinematic-mode")).toBe("3d");
     expect(container.querySelectorAll("[data-depth-card]")).toHaveLength(3);
+    // Content height must determine the card's height: fixed 460px clipped the
+    // bottom CTAs of TenantRAG and Psychology Atlas.
+    for (const card of container.querySelectorAll("[data-depth-card]")) {
+      expect(card.classList.contains("h-auto")).toBe(true);
+      expect(card.classList.contains("overflow-hidden")).toBe(true);
+      expect([...card.classList].some((className) => className.startsWith("min-h-["))).toBe(true);
+    }
     expect(container.querySelectorAll('[data-depth-card][data-active="true"]')).toHaveLength(1);
     expect(container.querySelectorAll('[data-depth-card] a[tabindex="-1"]')).toHaveLength(2);
     expect(screen.getByRole("button", { name: "Show Psychology Atlas" })).toBeTruthy();
