@@ -1,6 +1,4 @@
-import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LanguageProvider } from "@/i18n/LanguageContext";
@@ -12,7 +10,7 @@ import { useLightweightMode } from "@/hooks/use-lightweight-mode";
 import { lazy, Suspense, type ReactNode } from "react";
 import Index from "./pages/Index";
 const CaseStudyPage = lazy(() => import("./pages/CaseStudy"));
-import NotFound from "./pages/NotFound";
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 function MotionPreferences({ children }: { children: ReactNode }) {
   const { isLightweight } = useLightweightMode();
@@ -23,20 +21,17 @@ const App = () => (
   <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
     <LightweightModeProvider>
       <MotionPreferences>
-      <LanguageProvider>
-        <TooltipProvider>
+        <LanguageProvider>
           <OrbitalVoid />
-          <Toaster />
           <Sonner />
-          <BrowserRouter basename={getBasePath() || "/"}>
+          <BrowserRouter basename={getBasePath() || "/"} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/case-studies/:slug" element={<Suspense fallback={<div role="status" className="min-h-screen pt-24 text-center font-mono text-sm text-muted-foreground">Loading case study…</div>}><CaseStudyPage /></Suspense>} />
-              <Route path="*" element={<NotFound />} />
+              <Route path="*" element={<Suspense fallback={null}><NotFound /></Suspense>} />
             </Routes>
           </BrowserRouter>
-        </TooltipProvider>
-      </LanguageProvider>
+        </LanguageProvider>
       </MotionPreferences>
     </LightweightModeProvider>
   </ThemeProvider>

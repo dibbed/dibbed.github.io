@@ -3,16 +3,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { MobileBottomNavigation } from "@/components/MobileBottomNavigation";
 import { Hero } from "@/components/Hero";
-import { Skills } from "@/components/Skills";
-import { Experience } from "@/components/Experience";
-import { Projects } from "@/components/Projects";
 import { HiringTrail } from "@/components/HiringTrail";
+import { DeferredSection } from "@/components/DeferredSection";
 import { CinematicShowcase } from "@/components/CinematicShowcase";
 import { ScrollStage } from "@/components/ScrollStage";
 import { ScrollProgress } from "@/components/ScrollProgress";
-import { Education } from "@/components/Education";
-import { Contact } from "@/components/Contact";
-import { GitHubActivity } from "@/components/GitHubActivity";
 import { MatrixRain } from "@/components/MatrixRain";
 import { BootSequence } from "@/components/BootSequence";
 import { useKonamiCode } from "@/hooks/use-konami-code";
@@ -25,6 +20,13 @@ import { projects } from "@/data/resume-data";
 // Command UIs and their dependencies are loaded only on first use.
 const CommandPalette = lazy(() => import("@/components/CommandPalette").then((m) => ({ default: m.CommandPalette })));
 const MiniTerminal = lazy(() => import("@/components/MiniTerminal").then((m) => ({ default: m.MiniTerminal })));
+// Independent below-the-fold sections do not compete with the hero on first load.
+const Projects = lazy(() => import("@/components/Projects").then((m) => ({ default: m.Projects })));
+const Skills = lazy(() => import("@/components/Skills").then((m) => ({ default: m.Skills })));
+const Experience = lazy(() => import("@/components/Experience").then((m) => ({ default: m.Experience })));
+const GitHubActivity = lazy(() => import("@/components/GitHubActivity").then((m) => ({ default: m.GitHubActivity })));
+const Education = lazy(() => import("@/components/Education").then((m) => ({ default: m.Education })));
+const Contact = lazy(() => import("@/components/Contact").then((m) => ({ default: m.Contact })));
 
 const BOOT_STORAGE_KEY = "portfolio-boot-seen";
 
@@ -174,19 +176,31 @@ const Index = () => {
           <Hero />
           <CinematicShowcase />
           <ScrollStage><HiringTrail /></ScrollStage>
-          <ScrollStage>
-            <Projects
-              activeFilter={projectFilter}
-              onFilterChange={setProjectFilter}
-              searchQuery={projectSearch}
-              onSearchChange={setProjectSearch}
-            />
-          </ScrollStage>
-          <ScrollStage><Skills onFilterProjects={handleFilterProjectsFromMap} /></ScrollStage>
-          <ScrollStage><Experience /></ScrollStage>
-          <ScrollStage><GitHubActivity /></ScrollStage>
-          <ScrollStage><Education /></ScrollStage>
-          <ScrollStage><Contact /></ScrollStage>
+          <DeferredSection id="projects" label="Projects" minHeight={1700} rootMargin="1800px 0px">
+            <ScrollStage>
+              <Projects
+                activeFilter={projectFilter}
+                onFilterChange={setProjectFilter}
+                searchQuery={projectSearch}
+                onSearchChange={setProjectSearch}
+              />
+            </ScrollStage>
+          </DeferredSection>
+          <DeferredSection id="skills" label="Technical Skills" minHeight={1100}>
+            <ScrollStage><Skills onFilterProjects={handleFilterProjectsFromMap} /></ScrollStage>
+          </DeferredSection>
+          <DeferredSection id="experience" label="Experience" minHeight={800}>
+            <ScrollStage><Experience /></ScrollStage>
+          </DeferredSection>
+          <DeferredSection id="github-activity" label="GitHub activity" minHeight={500}>
+            <ScrollStage><GitHubActivity /></ScrollStage>
+          </DeferredSection>
+          <DeferredSection id="education" label="Education" minHeight={440}>
+            <ScrollStage><Education /></ScrollStage>
+          </DeferredSection>
+          <DeferredSection id="contact" label="Contact" minHeight={420}>
+            <ScrollStage><Contact /></ScrollStage>
+          </DeferredSection>
         </main>
       </motion.div>
     </>
