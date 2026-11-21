@@ -121,7 +121,9 @@ export function OrbitalVoid() {
     };
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // A smaller canvas backing store on coarse/mobile devices limits fill cost.
+      const lowPower = window.matchMedia("(pointer: coarse), (max-width: 767px)").matches;
+      const dpr = Math.min(window.devicePixelRatio || 1, lowPower ? 1.5 : 2);
       w = window.innerWidth;
       h = window.innerHeight;
       canvas.width = w * dpr;
@@ -176,7 +178,6 @@ export function OrbitalVoid() {
 
     const onScroll = () => {
       scrollRef.current = window.scrollY;
-      docHeightRef.current = document.documentElement.scrollHeight;
     };
 
     const onTouchMove = (e: TouchEvent) => {
@@ -218,13 +219,24 @@ export function OrbitalVoid() {
       }
     };
 
+    // 30fps on coarse/mobile devices. Desktop keeps full-rate pointer glow.
+    // Rendering stays on rAF and heavy canvas work is skipped on alternate ticks.
+    const frameInterval = window.matchMedia("(pointer: coarse), (max-width: 767px)").matches
+      ? 1000 / 30
+      : 0; // Desktop draws on every native rAF without timing-related frame skips.
+    let lastFrameAt = 0;
     const CONNECTION_DIST = 140;
     const MOUSE_RADIUS = 190;
     const MOUSE_CONNECT_DIST = 175;
     const REPULSE_FORCE = 0.48;
 
-    const draw = () => {
+    const draw = (timestamp: number) => {
       if (!running) return;
+      if (frameInterval && lastFrameAt && timestamp - lastFrameAt < frameInterval) {
+        rafRef.current = requestAnimationFrame(draw);
+        return;
+      }
+      lastFrameAt = timestamp;
       ctx.clearRect(0, 0, w, h);
 
       const particles = particlesRef.current;
@@ -418,6 +430,13 @@ export function OrbitalVoid() {
       }
     };
 
+    const layoutObserver = typeof ResizeObserver !== "undefined"
+      ? new ResizeObserver(() => {
+          docHeightRef.current = document.documentElement.scrollHeight;
+        })
+      : null;
+    layoutObserver?.observe(document.documentElement);
+
     window.addEventListener("resize", onResize);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("mousemove", onMouseMove, { passive: true });
@@ -433,6 +452,7 @@ export function OrbitalVoid() {
 
     return () => {
       stopLoop();
+      layoutObserver?.disconnect();
       clearTimeout(resizeTimer);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("scroll", onScroll);

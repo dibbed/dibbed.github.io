@@ -17,6 +17,19 @@ export function SpotlightCard({ id, children, className }: SpotlightCardProps) {
     const rect = ref.current.getBoundingClientRect();
     ref.current.style.setProperty("--spotlight-x", `${e.clientX - rect.left}px`);
     ref.current.style.setProperty("--spotlight-y", `${e.clientY - rect.top}px`);
+    // Update 3D tilt with CSS variables, never triggering React renders.
+    if (window.matchMedia("(min-width: 1024px) and (hover: hover) and (pointer: fine)").matches) {
+      const relativeX = (e.clientX - rect.left) / rect.width - 0.5;
+      const relativeY = (e.clientY - rect.top) / rect.height - 0.5;
+      ref.current.style.setProperty("--card-tilt-x", (-relativeY * 7).toFixed(2) + "deg");
+      ref.current.style.setProperty("--card-tilt-y", (relativeX * 8).toFixed(2) + "deg");
+    }
+  };
+
+  const resetTilt = () => {
+    if (!ref.current) return;
+    ref.current.style.setProperty("--card-tilt-x", "0deg");
+    ref.current.style.setProperty("--card-tilt-y", "0deg");
   };
 
   return (
@@ -24,6 +37,8 @@ export function SpotlightCard({ id, children, className }: SpotlightCardProps) {
       id={id}
       ref={ref}
       onMouseMove={handleMouseMove}
+      onMouseLeave={resetTilt}
+      data-tilt-card="true"
       className={cn(
         "group/spotlight relative overflow-hidden rounded-lg border border-border/60 bg-card/65 backdrop-blur-sm transition-colors hover:border-primary/40",
         className
