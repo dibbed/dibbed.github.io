@@ -79,6 +79,16 @@ describe("source-backed flagship case studies", () => {
     expect(screen.getAllByRole("link", { name: /مشاهده پیاده‌سازی/ }).length).toBeGreaterThan(0);
   });
 
+  it("adds a mobile reading index with deep links to the engineering evidence", () => {
+    renderCase("computerpilot-mcp");
+    const nav = screen.getByRole("navigation", { name: /Case study sections|فهرست بخش‌های نمونه‌کار/ });
+    const anchors = Array.from(nav.querySelectorAll("a")).map((a) => a.getAttribute("href"));
+    expect(anchors).toEqual(["#case-architecture", "#case-decisions", "#case-evidence", "#case-constraints"]);
+    for (const anchor of anchors) {
+      expect(document.querySelector(anchor!)).toBeTruthy();
+    }
+  });
+
   it("makes the short hiring route navigate to each real case study", () => {
     render(
       <LanguageProvider>

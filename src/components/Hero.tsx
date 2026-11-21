@@ -39,7 +39,7 @@ export function Hero() {
   const depthRotate = useTransform(smooth, [0, 1], [-17, 24]);
 
   return (
-    <section ref={sectionRef} id="hero" className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 pt-16">
+    <section ref={sectionRef} id="hero" className="relative flex min-h-[min(640px,90dvh)] items-center justify-center overflow-hidden px-4 pb-12 pt-24 lg:min-h-screen lg:pb-0 lg:pt-16">
       {/* Ambient glowing orbs (disabled in lightweight / reduced-motion mode) */}
       {!isLightweight && (
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -79,20 +79,24 @@ export function Hero() {
           </span>
         </motion.div>
 
-        <motion.h1 variants={fadeUp} className="mb-4 font-mono text-5xl font-bold tracking-tight sm:text-7xl" dir="ltr">
-          {isLightweight ? profile.name : <TypewriterText text={profile.name} />}
+        <motion.h1 variants={fadeUp} className="mb-4 font-mono text-[clamp(1.9rem,9vw,3.25rem)] font-bold tracking-tight sm:text-7xl" dir="ltr">
+          {isLightweight || !depthEnabled ? profile.name : <TypewriterText text={profile.name} />}
         </motion.h1>
 
-        <motion.p variants={fadeUp} className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground">
+        <motion.p variants={fadeUp} className="mx-auto mb-6 max-w-2xl text-base leading-7 text-muted-foreground lg:mb-10 lg:text-lg">
           {t(translations.hero.subtitle)}
         </motion.p>
 
-        {/* Stats */}
-        <motion.div variants={fadeUp} className="mb-10 grid grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-8">
+        <p className="mb-5 font-mono text-xs font-semibold tracking-wide text-primary lg:hidden" dir="ltr">
+          Python Backend · Automation · MCP
+        </p>
+        <div className="flex flex-col">
+        {/* Stats: mobile prioritizes evidence-relevant figures after the calls to action. */}
+        <motion.div variants={fadeUp} className="order-2 mt-7 grid grid-cols-2 gap-4 lg:order-1 lg:mb-10 lg:mt-0 lg:flex lg:flex-wrap lg:items-center lg:justify-center lg:gap-8">
           {achievements.slice(0, 4).map((a) => (
-            <div key={a.label} className="text-center">
+            <div key={a.label} className={"text-center " + (["Supported OS Targets", "Chemistry Elements"].includes(a.label) ? "hidden lg:block" : "")}>
               <div className="font-mono text-3xl font-bold tabular-nums text-foreground">
-                {isLightweight ? a.value : <CountUp value={a.value} />}
+                {isLightweight || !depthEnabled ? a.value : <CountUp value={a.value} />}
               </div>
               <div className="text-xs text-muted-foreground">
                 {translations.achievements[a.label]
@@ -104,7 +108,7 @@ export function Hero() {
         </motion.div>
 
         {/* Employer-first: links to real evidence, code and contact. */}
-        <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center gap-3" dir="ltr">
+        <motion.div variants={fadeUp} className="order-1 grid grid-cols-2 items-center justify-center gap-3 lg:order-2 lg:flex lg:flex-wrap" dir="ltr">
           <Button asChild className="min-h-11 gap-2 font-mono text-xs sm:text-sm">
             <a href="#projects">
               <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
@@ -117,18 +121,19 @@ export function Hero() {
               {t(translations.hero.downloadCv)}
             </a>
           </Button>
-          <Button variant="outline" asChild className="min-h-11 gap-2 border-border/60 bg-card/50 font-mono text-xs backdrop-blur-sm hover:border-primary/50 hover:bg-primary/5 sm:text-sm">
+          <Button variant="outline" asChild className="hidden min-h-11 gap-2 border-border/60 bg-card/50 font-mono text-xs backdrop-blur-sm hover:border-primary/50 hover:bg-primary/5 lg:inline-flex sm:text-sm">
             <a href={"https://" + profile.github} target="_blank" rel="noopener noreferrer">
               <Github className="h-4 w-4" aria-hidden="true" /> GitHub
             </a>
           </Button>
-          <Button variant="outline" asChild className="min-h-11 gap-2 border-border/60 bg-card/50 font-mono text-xs backdrop-blur-sm hover:border-primary/50 hover:bg-primary/5 sm:text-sm">
+          <Button variant="outline" asChild className="hidden min-h-11 gap-2 border-border/60 bg-card/50 font-mono text-xs backdrop-blur-sm hover:border-primary/50 hover:bg-primary/5 lg:inline-flex sm:text-sm">
             <a href={"mailto:" + profile.email}>
               <Mail className="h-4 w-4" aria-hidden="true" />
               {t(translations.hero.contactMe)}
             </a>
           </Button>
         </motion.div>
+        </div>
       </motion.div>
 
       {/* Scroll indicator */}
@@ -136,7 +141,7 @@ export function Hero() {
         initial={isLightweight ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
-        className="absolute bottom-24 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 lg:bottom-8"
+        className="absolute bottom-24 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 lg:bottom-8 lg:flex"
       >
         <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
           {t(translations.hero.scroll)}

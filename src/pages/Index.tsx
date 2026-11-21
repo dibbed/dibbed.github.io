@@ -16,6 +16,7 @@ import { useLanguage } from "@/i18n/use-language";
 import { translations } from "@/i18n/translations";
 import { projectAnchor } from "@/lib/project-links";
 import { projects } from "@/data/resume-data";
+import { shouldSkipIntro } from "@/lib/mobile-ux";
 
 // Command UIs and their dependencies are loaded only on first use.
 const CommandPalette = lazy(() => import("@/components/CommandPalette").then((m) => ({ default: m.CommandPalette })));
@@ -43,7 +44,7 @@ const Index = () => {
   const { isLightweight } = useLightweightMode();
   const { t } = useLanguage();
   const [matrixActive, setMatrixActive] = useState(false);
-  const [booted, setBooted] = useState<boolean>(() => isLightweight || hasSeenBoot());
+  const [booted, setBooted] = useState<boolean>(() => shouldSkipIntro(isLightweight, hasSeenBoot()));
   const [projectFilter, setProjectFilter] = useState<string>("All");
   const [projectSearch, setProjectSearch] = useState<string>("");
   const [terminalOpen, setTerminalOpen] = useState(false);

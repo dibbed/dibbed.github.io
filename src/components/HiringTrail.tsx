@@ -10,7 +10,25 @@ export function HiringTrail() {
   const fa = lang === "fa";
   return (
     <section id="for-teams" className="scroll-mt-24 px-4 pt-10 sm:pt-12" aria-label={fa ? "مسیر بررسی برای کارفرما" : "For engineering teams"}>
-      <div className="mx-auto max-w-5xl rounded-2xl border border-primary/25 bg-card/60 p-5 shadow-[0_12px_55px_-42px_hsl(var(--primary)/0.5)] backdrop-blur-sm sm:p-7">
+      <div className="mx-auto max-w-5xl rounded-2xl border border-primary/30 bg-card/65 p-4 lg:hidden">
+        <p className="font-mono text-xs font-semibold text-primary">
+          {fa ? "برای تیم‌های فنی" : "FOR ENGINEERING TEAMS"}
+        </p>
+        <p className="mt-2 text-sm leading-7 text-foreground">
+          {fa ? "تصمیم‌های واقعی و تست‌ها را مستقیماً در سورس بررسی کن." : "Inspect real architecture and tests, not unsupported claims."}
+        </p>
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <Link to={caseStudyUrl(caseStudies[0].slug)}
+            className="inline-flex min-h-11 items-center justify-center gap-1 rounded-lg bg-primary px-3 text-center text-xs font-bold text-primary-foreground">
+            {fa ? "شواهد فنی" : "View evidence"} <ArrowUpRight className="h-4 w-4" />
+          </Link>
+          <a href={"mailto:" + profile.email}
+            className="inline-flex min-h-11 items-center justify-center gap-1 rounded-lg border border-primary/40 px-3 text-center text-xs font-bold text-primary">
+            <Mail className="h-4 w-4" />{fa ? "تماس" : "Contact"}
+          </a>
+        </div>
+      </div>
+      <div className="mx-auto hidden max-w-5xl rounded-2xl border border-primary/25 bg-card/60 p-5 shadow-[0_12px_55px_-42px_hsl(var(--primary)/0.5)] backdrop-blur-sm sm:p-7 lg:block">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="font-mono text-xs font-medium text-primary">{fa ? "// برای تیم‌های فنی" : "// FOR ENGINEERING TEAMS"}</p>

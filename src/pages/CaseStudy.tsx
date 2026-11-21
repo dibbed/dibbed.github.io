@@ -103,6 +103,22 @@ function CaseStudyContent({ item }: { item: CaseStudy }) {
         </nav>
       </header>
 
+      <nav aria-label={isFa ? "فهرست بخش‌های نمونه‌کار" : "Case study sections"}
+        className="sticky top-16 z-20 border-b border-border/55 bg-background/95 py-1.5 backdrop-blur-lg lg:hidden">
+        <div className="mobile-filter-rail mx-auto flex max-w-6xl gap-1.5 overflow-x-auto px-3" dir={isFa ? "rtl" : "ltr"}>
+          {[
+            ["#case-architecture", labels.architecture],
+            ["#case-decisions", labels.decisions],
+            ["#case-evidence", labels.evidence],
+            ["#case-constraints", labels.constraint],
+          ].map(([href, label]) => (
+            <a key={href} href={href}
+              className="inline-flex min-h-11 shrink-0 items-center rounded-lg border border-border/60 bg-card/70 px-3 text-xs font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+              {label}
+            </a>
+          ))}
+        </div>
+      </nav>
       <main id="case-content" tabIndex={-1} className="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
         <div className="pt-10 sm:pt-16">
           <div className="flex flex-wrap items-center gap-2 font-mono text-[11px] text-primary">
@@ -173,7 +189,7 @@ function CaseStudyContent({ item }: { item: CaseStudy }) {
 
         </ScrollStage>
         <ScrollStage>
-        <section id="case-architecture" className="mt-20 scroll-mt-24" aria-labelledby="architecture-heading">
+        <section id="case-architecture" className="mt-20 scroll-mt-32" aria-labelledby="architecture-heading">
           <div className="mb-6 flex items-center gap-2 text-primary">
             <Braces className="h-5 w-5" aria-hidden="true" />
             <h2 id="architecture-heading" className="text-2xl font-bold text-foreground">{labels.architecture}</h2>
@@ -197,7 +213,7 @@ function CaseStudyContent({ item }: { item: CaseStudy }) {
 
         </ScrollStage>
         <ScrollStage>
-        <section id="case-decisions" className="mt-20 scroll-mt-24" aria-labelledby="decisions-heading">
+        <section id="case-decisions" className="mt-20 scroll-mt-32" aria-labelledby="decisions-heading">
           <div className="mb-6 flex items-center gap-2 text-primary">
             <Code2 className="h-5 w-5" aria-hidden="true" />
             <h2 id="decisions-heading" className="text-2xl font-bold text-foreground">{labels.decisions}</h2>
@@ -222,7 +238,7 @@ function CaseStudyContent({ item }: { item: CaseStudy }) {
 
         </ScrollStage>
         <ScrollStage>
-        <section id="case-evidence" className="mt-20 scroll-mt-24" aria-labelledby="evidence-heading">
+        <section id="case-evidence" className="mt-20 scroll-mt-32" aria-labelledby="evidence-heading">
           <div className="mb-6 flex items-center gap-2 text-primary">
             <FileCheck2 className="h-5 w-5" aria-hidden="true" />
             <h2 id="evidence-heading" className="text-2xl font-bold text-foreground">{labels.evidence}</h2>
@@ -246,7 +262,7 @@ function CaseStudyContent({ item }: { item: CaseStudy }) {
 
         </ScrollStage>
         <ScrollStage>
-        <section className="mt-12 rounded-xl border border-amber-500/30 bg-amber-500/5 p-5 sm:p-7" aria-label={labels.constraint}>
+        <section id="case-constraints" className="mt-12 scroll-mt-32 rounded-xl border border-amber-500/30 bg-amber-500/5 p-5 sm:p-7" aria-label={labels.constraint}>
           <div className="flex items-center gap-2 text-foreground">
             <ShieldCheck className="h-5 w-5 text-amber-500" aria-hidden="true" />
             <h2 className="text-base font-bold">{labels.constraint}</h2>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ExternalLink, FileCode2, Network, Terminal } from "lucide-react";
 import {
   Dialog,
@@ -26,6 +26,18 @@ export function ArchitectureModal({ open, onOpenChange, data, projectName, termi
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(
     data.nodes?.[0]?.id ?? null
   );
+  const [showMobileDiagram, setShowMobileDiagram] = useState(false);
+  const [desktopLayout, setDesktopLayout] = useState(() =>
+    typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches
+  );
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 1024px)");
+    const sync = () => setDesktopLayout(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+
   const { t, lang } = useLanguage();
   const selectedNode = data.nodes?.find((node) => node.id === selectedNodeId) ?? data.nodes?.[0];
 
@@ -62,10 +74,22 @@ export function ArchitectureModal({ open, onOpenChange, data, projectName, termi
             </TabsList>
 
             <TabsContent value="diagram" className="space-y-4">
-              <MermaidDiagram
-                chart={data.mermaid}
-                className="rounded-lg border border-border/40 bg-background/50 p-4"
-              />
+              <div className="rounded-lg border border-primary/25 bg-primary/5 p-3 lg:hidden">
+                <p className="text-sm leading-7 text-foreground">
+                  {lang === "fa" && data.summaryFa ? data.summaryFa : data.summary}
+                </p>
+                <button type="button" onClick={() => setShowMobileDiagram((current) => !current)}
+                  aria-expanded={showMobileDiagram}
+                  className="mt-2 inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-semibold text-primary underline underline-offset-4">
+                  {showMobileDiagram
+                    ? (lang === "fa" ? "بستن نمودار" : "Hide diagram")
+                    : (lang === "fa" ? "نمایش نمودار کامل" : "Show full diagram")}
+                </button>
+              </div>
+              {(desktopLayout || showMobileDiagram) && (
+                <MermaidDiagram chart={data.mermaid}
+                  className="rounded-lg border border-border/40 bg-background/50 p-4" />
+              )}
 
               {data.nodes && data.nodes.length > 0 && (
                 <div className="space-y-2.5 rounded-lg border border-border/40 bg-background/40 p-3.5">
@@ -82,7 +106,7 @@ export function ArchitectureModal({ open, onOpenChange, data, projectName, termi
                           aria-pressed={active}
                           onClick={() => setSelectedNodeId(node.id)}
                           className={
-                            "rounded-md border px-2.5 py-1 font-mono text-[11px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary " +
+                            "inline-flex min-h-11 items-center rounded-md border px-3 py-1 font-mono text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary " +
                             (active
                               ? "border-primary/60 bg-primary/15 font-semibold text-primary"
                               : "border-border/60 bg-card/60 text-muted-foreground hover:border-primary/40 hover:text-foreground")

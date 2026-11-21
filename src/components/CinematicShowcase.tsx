@@ -102,7 +102,7 @@ function AccessibleCard({ study, index }: { study: CaseStudy; index: number }) {
         </div>
         <h3 className="relative mt-5 font-mono text-xl font-bold" dir="ltr">{study.projectName}</h3>
         <p className="relative mt-3 text-sm font-medium leading-7">{study.headline[lang]}</p>
-        <p className="relative mt-2 text-xs leading-6 text-muted-foreground">{study.deck[lang]}</p>
+        <p className="relative mt-2 line-clamp-3 text-sm leading-7 text-muted-foreground">{study.deck[lang]}</p>
         <Link to={caseStudyUrl(study.slug)} className="relative mt-5 inline-flex min-h-11 w-full items-center justify-between rounded-lg bg-primary/10 px-4 font-mono text-xs font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
           {lang === "fa" ? "بررسی نمونه‌کار" : "Open case study"}
           <ArrowUpRight className="h-4 w-4" aria-hidden="true" />

@@ -34,7 +34,10 @@ export function OrbitalVoid() {
 
   const createParticles = useCallback((w: number, h: number) => {
     const area = w * h;
-    const count = Math.max(30, Math.min(80, Math.floor(area / 18000)));
+    const mobile = window.matchMedia("(pointer: coarse), (max-width: 767px)").matches;
+    const count = mobile
+      ? Math.max(16, Math.min(38, Math.floor(area / 24000)))
+      : Math.max(30, Math.min(80, Math.floor(area / 18000)));
     const particles: Particle[] = [];
     for (let i = 0; i < count; i++) {
       const isHero = Math.random() < 0.15;
@@ -222,7 +225,7 @@ export function OrbitalVoid() {
     // 30fps on coarse/mobile devices. Desktop keeps full-rate pointer glow.
     // Rendering stays on rAF and heavy canvas work is skipped on alternate ticks.
     const frameInterval = window.matchMedia("(pointer: coarse), (max-width: 767px)").matches
-      ? 1000 / 30
+      ? 1000 / 24
       : 0; // Desktop draws on every native rAF without timing-related frame skips.
     let lastFrameAt = 0;
     const CONNECTION_DIST = 140;

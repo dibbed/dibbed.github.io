@@ -21,6 +21,19 @@ describe("published resume and brand assets", () => {
     expect(publicFile("favicon.ico").length).toBeGreaterThan(1000);
   });
 
+  it("provides branded per-project social images and a legible light-mode favicon", () => {
+    const light = publicFile("favicon-light.svg").toString("utf8");
+    expect(light).toContain('fill="#0a1725"');
+    expect(light).not.toMatch(/<rect\\b/i);
+    for (const slug of ["computerpilot-mcp", "tenant-rag", "psychology-atlas"]) {
+      const png = publicFile("og-" + slug + ".png");
+      expect(png.subarray(0, 8).toString("hex")).toBe("89504e470d0a1a0a");
+      expect(png.readUInt32BE(16)).toBe(1200);
+      expect(png.readUInt32BE(20)).toBe(630);
+      expect(png.length).toBeGreaterThan(10000);
+    }
+  });
+
   it("publishes a real resume PDF rather than a placeholder", () => {
     const pdf = publicFile("resume.pdf");
     expect(pdf.subarray(0, 5).toString("utf8")).toBe("%PDF-");

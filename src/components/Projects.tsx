@@ -82,7 +82,7 @@ export function Projects({
   );
 
   return (
-    <section id="projects" className="px-4 py-24">
+    <section id="projects" className="scroll-mt-24 px-4 py-14 sm:py-24">
       <div className="mx-auto max-w-5xl">
         <motion.h2
           initial={isLightweight ? false : { opacity: 0, y: 20 }}
@@ -112,7 +112,7 @@ export function Projects({
                   type="button"
                   aria-pressed={active}
                   onClick={() => onFilterChange(area.key)}
-                  className={`inline-flex min-h-9 shrink-0 whitespace-nowrap items-center gap-1.5 rounded-md border px-3 py-1.5 font-mono text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                  className={`inline-flex min-h-11 shrink-0 whitespace-nowrap items-center gap-1.5 rounded-md border px-3 py-1.5 font-mono text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                     active
                       ? "border-primary/60 bg-primary/15 font-semibold text-primary"
                       : "border-border/50 bg-background/40 text-muted-foreground hover:border-primary/40 hover:text-foreground"
@@ -146,7 +146,7 @@ export function Projects({
                   onSearchChange("");
                 }}
                 aria-label={t(translations.projects.clearFilter)}
-                className="absolute right-2 rounded p-0.5 text-muted-foreground hover:text-primary rtl:left-2 rtl:right-auto"
+                className="absolute right-0 inline-flex h-11 w-11 items-center justify-center rounded-md text-muted-foreground hover:text-primary rtl:left-0 rtl:right-auto"
               >
                 <X className="h-3.5 w-3.5" aria-hidden="true" />
               </button>
@@ -160,14 +160,28 @@ export function Projects({
             <div className="mb-4 flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-primary" aria-hidden="true" />
               <span className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">
-                {t(translations.projects.featuredLabel)}
+                {lang === "fa" ? "دسترسی سریع به سه پروژه شاخص" : "Flagship project shortcuts"}
               </span>
             </div>
 
             <div className="grid gap-4 lg:grid-cols-3">
               {featuredProjects.map((p) => (
                 <SpotlightCard id={projectAnchor(p.name)} key={p.name} className="flex h-full scroll-mt-24 flex-col border-primary/30 bg-card/75">
-                  <div className="flex h-full flex-col justify-between space-y-4 p-5">
+                  <div className="flex items-center gap-3 p-4 lg:hidden">
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-mono text-sm font-bold text-foreground" dir="ltr">{p.name}</h3>
+                      <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                        {lang === "fa" ? "پروژه شاخص؛ جزئیات و شواهد در مطالعه موردی" : "Flagship project · full evidence in its case study"}
+                      </p>
+                    </div>
+                    {caseStudies.filter((caseStudy) => caseStudy.projectName === p.name).map((caseStudy) => (
+                      <Link key={caseStudy.slug} to={caseStudyUrl(caseStudy.slug)}
+                        className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-lg border border-primary/35 bg-primary/10 px-3 font-mono text-xs font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                        {lang === "fa" ? "بررسی" : "Read"} <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                      </Link>
+                    ))}
+                  </div>
+                  <div className="hidden h-full flex-col justify-between space-y-4 p-5 lg:flex">
                     <div className="space-y-3">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <h3 className="font-mono text-base font-bold text-foreground" dir="ltr">
@@ -260,7 +274,7 @@ export function Projects({
                             href={p.repoUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="mt-2 inline-flex items-center gap-1 font-mono text-[11px] font-medium text-primary underline underline-offset-2 hover:text-primary/80"
+                            className="mt-1 inline-flex min-h-11 items-center gap-1.5 rounded px-2 font-mono text-xs font-medium text-primary underline underline-offset-2 hover:text-primary/80"
                           >
                             <Github className="h-3.5 w-3.5" aria-hidden="true" />{" "}
                             {t(translations.projects.source)}
@@ -271,7 +285,7 @@ export function Projects({
                             href={p.demoUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="mt-2 inline-flex items-center gap-1 font-mono text-[11px] font-medium text-primary underline underline-offset-2 hover:text-primary/80"
+                            className="mt-1 inline-flex min-h-11 items-center gap-1.5 rounded px-2 font-mono text-xs font-medium text-primary underline underline-offset-2 hover:text-primary/80"
                           >
                             <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />{" "}
                             {t(translations.projects.liveDemo)}
@@ -321,7 +335,7 @@ export function Projects({
                 onFilterChange("All");
                 onSearchChange("");
               }}
-              className="font-mono text-xs text-primary underline underline-offset-2"
+              className="inline-flex min-h-11 items-center font-mono text-sm text-primary underline underline-offset-2"
             >
               {t(translations.projects.clearFilter)}
             </button>
@@ -379,7 +393,7 @@ export function Projects({
                           href={p.repoUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="mt-2 inline-flex items-center gap-1 font-mono text-[11px] font-medium text-primary underline underline-offset-2 hover:text-primary/80"
+                          className="mt-1 inline-flex min-h-11 items-center gap-1.5 rounded px-2 font-mono text-xs font-medium text-primary underline underline-offset-2 hover:text-primary/80"
                         >
                           <Github className="h-3 w-3" aria-hidden="true" />{" "}
                           {t(translations.projects.source)}
@@ -390,7 +404,7 @@ export function Projects({
                           href={p.demoUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="mt-2 inline-flex items-center gap-1 font-mono text-[11px] font-medium text-primary underline underline-offset-2 hover:text-primary/80"
+                          className="mt-1 inline-flex min-h-11 items-center gap-1.5 rounded px-2 font-mono text-xs font-medium text-primary underline underline-offset-2 hover:text-primary/80"
                         >
                           <ExternalLink className="h-3 w-3" aria-hidden="true" />{" "}
                           {t(translations.projects.liveDemo)}
