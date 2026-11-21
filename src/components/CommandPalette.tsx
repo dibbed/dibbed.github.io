@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
-import { profile } from "@/data/resume-data";
+import { profile, projects } from "@/data/resume-data";
 import { getResumeUrl } from "@/lib/utils";
+import { useLanguage } from "@/i18n/LanguageContext";
+import { translations } from "@/i18n/translations";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode";
 import {
   CommandDialog,
   CommandEmpty,
@@ -23,24 +26,35 @@ import {
   Moon,
   FileDown,
   Copy,
+  Languages,
+  Terminal,
+  Zap,
+  ExternalLink,
 } from "lucide-react";
 
-const navItems = [
-  { label: "Home", href: "#hero", icon: Home, shortcut: "H" },
-  { label: "Skills", href: "#skills", icon: Code2, shortcut: "S" },
-  { label: "Experience", href: "#experience", icon: Briefcase, shortcut: "E" },
-  { label: "Projects", href: "#projects", icon: FolderGit2, shortcut: "P" },
-  { label: "Education", href: "#education", icon: GraduationCap, shortcut: "D" },
-  { label: "Contact", href: "#contact", icon: Mail, shortcut: "C" },
-];
+interface CommandPaletteProps {
+  onOpenTerminal?: () => void;
+  onSelectProject?: (projectName: string) => void;
+}
 
-export function CommandPalette() {
+export function CommandPalette({ onOpenTerminal, onSelectProject }: CommandPaletteProps) {
   const [open, setOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
+  const { t, toggleLang } = useLanguage();
+  const { isLightweight, manualLightweight, prefersReducedMotion, toggleLightweight } = useLightweightMode();
+
+  const navItems = [
+    { label: t(translations.nav.home), href: "#hero", icon: Home },
+    { label: t(translations.nav.skills), href: "#skills", icon: Code2 },
+    { label: t(translations.nav.experience), href: "#experience", icon: Briefcase },
+    { label: t(translations.nav.projects), href: "#projects", icon: FolderGit2 },
+    { label: t(translations.nav.education), href: "#education", icon: GraduationCap },
+    { label: t(translations.nav.contact), href: "#contact", icon: Mail },
+  ];
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+      if (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setOpen((o) => !o);
       }
@@ -52,12 +66,34 @@ export function CommandPalette() {
   const scrollTo = (href: string) => {
     setOpen(false);
     const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: "smooth" });
+    el?.scrollIntoView({ behavior: isLightweight ? "auto" : "smooth" });
   };
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
     setOpen(false);
+  };
+
+  const handleToggleLang = () => {
+    toggleLang();
+    setOpen(false);
+  };
+
+  const handleToggleLightweight = () => {
+    if (prefersReducedMotion) return;
+    const next = !manualLightweight;
+    toggleLightweight();
+    toast.success(
+      next
+        ? t(translations.commandPalette.lightweightEnabled)
+        : t(translations.commandPalette.lightweightDisabled)
+    );
+    setOpen(false);
+  };
+
+  const handleOpenTerminal = () => {
+    setOpen(false);
+    onOpenTerminal?.();
   };
 
   const downloadCV = () => {
@@ -68,49 +104,95 @@ export function CommandPalette() {
     a.click();
   };
 
-  const copyEmail = () => {
-    navigator.clipboard.writeText(profile.email);
-    toast.success("Email copied to clipboard");
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(profile.email);
+      toast.success(t(translations.commandPalette.emailCopied));
+      setOpen(false);
+    } catch {
+      toast.error(t(translations.commandPalette.emailCopyFailed));
+    }
+  };
+
+  const handleSelectProject = (projectName: string, repoUrl?: string) => {
     setOpen(false);
+    if (onSelectProject) {
+      onSelectProject(projectName);
+      return;
+    }
+    if (repoUrl) {
+      window.open(repoUrl, "_blank", "noopener,noreferrer");
+    }
   };
 
   return (
-    <CommandDialog open={open} onOpenChange={setOpen}>
-      <CommandInput placeholder="Type a command or search..." />
+    <CommandDialog
+      open={open}
+      onOpenChange={setOpen}
+      title={t(translations.commandPalette.dialogTitle)}
+      description={t(translations.commandPalette.dialogDescription)}
+    >
+      <CommandInput placeholder={t(translations.commandPalette.placeholder)} />
       <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup heading="Navigate">
+        <CommandEmpty>{t(translations.commandPalette.empty)}</CommandEmpty>
+        <CommandGroup heading={t(translations.commandPalette.navigateGroup)}>
           {navItems.map((item) => (
             <CommandItem key={item.href} onSelect={() => scrollTo(item.href)}>
-              <item.icon className="mr-2 h-4 w-4" />
-              {item.label}
-              <CommandShortcut>{item.shortcut}</CommandShortcut>
+              <item.icon className="mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0" aria-hidden="true" />
+              <span>{item.label}</span>
             </CommandItem>
           ))}
         </CommandGroup>
-        <CommandGroup heading="Actions">
+
+        <CommandGroup heading={t(translations.commandPalette.projectsGroup)}>
+          {projects.map((project) => (
+            <CommandItem
+              key={project.name}
+              value={`${project.name} ${project.tech.join(" ")} ${(project.focus || []).join(" ")}`}
+              onSelect={() => handleSelectProject(project.name, project.repoUrl)}
+            >
+              <ExternalLink className="mr-2 h-4 w-4 shrink-0 rtl:ml-2 rtl:mr-0" aria-hidden="true" />
+              <span className="truncate">{project.name}</span>
+            </CommandItem>
+          ))}
+        </CommandGroup>
+
+        <CommandGroup heading={t(translations.commandPalette.actionsGroup)}>
+          {onOpenTerminal && (
+            <CommandItem onSelect={handleOpenTerminal}>
+              <Terminal className="mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0" aria-hidden="true" />
+              <span>{t(translations.commandPalette.openTerminal)}</span>
+              <CommandShortcut>Ctrl+`</CommandShortcut>
+            </CommandItem>
+          )}
           <CommandItem onSelect={toggleTheme}>
-            {theme === "dark" ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
-            Toggle Theme
-            <CommandShortcut>T</CommandShortcut>
+            {resolvedTheme === "dark" ? (
+              <Sun className="mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0" aria-hidden="true" />
+            ) : (
+              <Moon className="mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0" aria-hidden="true" />
+            )}
+            <span>{t(translations.commandPalette.toggleTheme)}</span>
+          </CommandItem>
+          <CommandItem onSelect={handleToggleLang}>
+            <Languages className="mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0" aria-hidden="true" />
+            <span>{t(translations.commandPalette.toggleLanguage)}</span>
+          </CommandItem>
+          <CommandItem onSelect={handleToggleLightweight} disabled={prefersReducedMotion}>
+            <Zap className="mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0" aria-hidden="true" />
+            <span>{prefersReducedMotion
+              ? t(translations.nav.systemReducedMotion)
+              : t(translations.commandPalette.toggleLightweight)}</span>
           </CommandItem>
           <CommandItem onSelect={downloadCV}>
-            <FileDown className="mr-2 h-4 w-4" />
-            Download CV
-            <CommandShortcut>⇧D</CommandShortcut>
+            <FileDown className="mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0" aria-hidden="true" />
+            <span>{t(translations.commandPalette.downloadCv)}</span>
           </CommandItem>
           <CommandItem onSelect={copyEmail}>
-            <Copy className="mr-2 h-4 w-4" />
-            Copy Email
-            <CommandShortcut>⇧E</CommandShortcut>
+            <Copy className="mr-2 h-4 w-4 rtl:ml-2 rtl:mr-0" aria-hidden="true" />
+            <span>{t(translations.commandPalette.copyEmail)}</span>
           </CommandItem>
         </CommandGroup>
       </CommandList>
     </CommandDialog>
   );
-}
-
-export function useCommandPalette() {
-  const [open, setOpen] = useState(false);
-  return { open, setOpen };
 }

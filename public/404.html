@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 — Ali Khalili</title>
+    <script>
+      (function () {
+        var target = window.location.pathname + window.location.search + window.location.hash;
+        if (target && target !== "/" && !window.location.search.includes("redirect=")) {
+          window.location.replace("/?redirect=" + encodeURIComponent(target));
+        }
+      })();
+    </script>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #030712;
+        color: #e2e8f0;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        text-align: center;
+        padding: 24px;
+      }
+      a {
+        color: #10b981;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+      p {
+        color: #94a3b8;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>404</h1>
+      <p>Route not found. Redirecting to portfolio...</p>
+      <a href="/">Return to Home</a>
+    </main>
+  </body>
+</html>

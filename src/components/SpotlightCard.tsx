@@ -1,6 +1,6 @@
-import { useRef, useState, type ReactNode } from "react";
-import { motion } from "framer-motion";
+import { useRef, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode";
 
 interface SpotlightCardProps {
   children: ReactNode;
@@ -9,47 +9,51 @@ interface SpotlightCardProps {
 
 export function SpotlightCard({ children, className }: SpotlightCardProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
+  const { isLightweight } = useLightweightMode();
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
+    if (isLightweight || !ref.current) return;
     const rect = ref.current.getBoundingClientRect();
-    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    ref.current.style.setProperty("--spotlight-x", `${e.clientX - rect.left}px`);
+    ref.current.style.setProperty("--spotlight-y", `${e.clientY - rect.top}px`);
   };
 
   return (
-    <motion.div
+    <div
       ref={ref}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        "relative overflow-hidden rounded-lg border border-border/50 bg-card/50 backdrop-blur-sm transition-colors",
+        "group/spotlight relative overflow-hidden rounded-lg border border-border/60 bg-card/65 backdrop-blur-sm transition-colors hover:border-primary/40",
         className
       )}
     >
-      {/* Spotlight gradient */}
-      <div
-        className="pointer-events-none absolute -inset-px rounded-lg opacity-0 transition-opacity duration-500"
-        style={{
-          opacity: isHovered ? 1 : 0,
-          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, hsl(var(--primary) / 0.12), transparent 40%)`,
-        }}
-      />
-      {/* Border glow */}
-      <div
-        className="pointer-events-none absolute -inset-px rounded-lg opacity-0 transition-opacity duration-500"
-        style={{
-          opacity: isHovered ? 1 : 0,
-          background: `radial-gradient(300px circle at ${position.x}px ${position.y}px, hsl(var(--primary) / 0.25), transparent 40%)`,
-          mask: "linear-gradient(black, black) content-box, linear-gradient(black, black)",
-          maskComposite: "exclude",
-          WebkitMaskComposite: "xor",
-          padding: "1px",
-        }}
-      />
+      {!isLightweight && (
+        <>
+          {/* Spotlight surface glow (CSS-variable driven, zero React re-renders) */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-px rounded-lg opacity-0 transition-opacity duration-300 group-hover/spotlight:opacity-100"
+            style={{
+              background:
+                "radial-gradient(560px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%), hsl(var(--primary) / 0.14), transparent 42%)",
+            }}
+          />
+          {/* Border glow */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-px rounded-lg opacity-0 transition-opacity duration-300 group-hover/spotlight:opacity-100"
+            style={{
+              background:
+                "radial-gradient(280px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%), hsl(var(--primary) / 0.32), transparent 45%)",
+              mask: "linear-gradient(black, black) content-box, linear-gradient(black, black)",
+              maskComposite: "exclude",
+              WebkitMaskComposite: "xor",
+              padding: "1px",
+            }}
+          />
+        </>
+      )}
       <div className="relative z-10">{children}</div>
-    </motion.div>
+    </div>
   );
 }
