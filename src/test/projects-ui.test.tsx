@@ -14,7 +14,7 @@ function ProjectHarness() {
   return (
     <LightweightModeProvider>
       <LanguageProvider>
-        <MemoryRouter>
+        <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Projects
           activeFilter={area}
           onFilterChange={setArea}

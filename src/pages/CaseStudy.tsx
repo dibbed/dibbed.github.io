@@ -7,7 +7,7 @@ import {
   Layers3, Mail, Moon, Scale, ShieldCheck, Sun, TestTubeDiagonal,
 } from "lucide-react";
 import { caseStudies, caseStudyForSlug, caseStudyUrl, evidenceUrl, type CaseStudy, type Localized } from "@/data/case-studies";
-import { useLanguage } from "@/i18n/LanguageContext";
+import { useLanguage } from "@/i18n/use-language";
 import { getResumeUrl } from "@/lib/utils";
 import { profile } from "@/data/resume-data";
 import NotFound from "@/pages/NotFound";

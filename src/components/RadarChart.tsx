@@ -11,8 +11,8 @@ import {
 } from "recharts";
 import { SpotlightCard } from "@/components/SpotlightCard";
 import { projects } from "@/data/resume-data";
-import { useLanguage } from "@/i18n/LanguageContext";
-import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { useLanguage } from "@/i18n/use-language";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 
 // Areas are explicit tags on featured projects, not subjective skill percentages.
 const areas = [

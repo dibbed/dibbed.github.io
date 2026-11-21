@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 
 function matchesDesktop(): boolean {
   return typeof window !== "undefined" &&

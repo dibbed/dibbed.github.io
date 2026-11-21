@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback } from "react";
-import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 
 interface Particle {
   x: number;

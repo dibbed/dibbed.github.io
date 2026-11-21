@@ -3,9 +3,9 @@ import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import { profile, projects } from "@/data/resume-data";
 import { getResumeUrl } from "@/lib/utils";
-import { useLanguage } from "@/i18n/LanguageContext";
+import { useLanguage } from "@/i18n/use-language";
 import { translations } from "@/i18n/translations";
-import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import {
   CommandDialog,
   CommandEmpty,

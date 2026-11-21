@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, BookOpen, FileCheck2, Mail } from "lucide-react";
 import { caseStudies, caseStudyUrl } from "@/data/case-studies";
 import { profile } from "@/data/resume-data";
-import { useLanguage } from "@/i18n/LanguageContext";
+import { useLanguage } from "@/i18n/use-language";
 
 /** A three-step, evidence-first path for a hiring manager. No fictional client claims. */
 export function HiringTrail() {

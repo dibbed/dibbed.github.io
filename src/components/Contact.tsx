@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Github, Send, Mail, Globe, MapPin } from "lucide-react";
 import { profile } from "@/data/resume-data";
-import { useLanguage } from "@/i18n/LanguageContext";
-import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { useLanguage } from "@/i18n/use-language";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import { translations } from "@/i18n/translations";
 
 const links = [

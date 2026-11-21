@@ -1,7 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { LanguageProvider, useLanguage } from "@/i18n/LanguageContext";
-import { LightweightModeProvider, useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { LanguageProvider } from "@/i18n/LanguageContext";
+import { useLanguage } from "@/i18n/use-language";
+import { LightweightModeProvider } from "@/hooks/use-lightweight-mode";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import { getBasePath, getResumeUrl } from "@/lib/utils";
 import { projects } from "@/data/resume-data";
 

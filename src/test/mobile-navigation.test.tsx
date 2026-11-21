@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { LanguageProvider, useLanguage } from "@/i18n/LanguageContext";
+import { LanguageProvider } from "@/i18n/LanguageContext";
+import { useLanguage } from "@/i18n/use-language";
 import { LightweightModeProvider } from "@/hooks/use-lightweight-mode";
 import { MobileBottomNavigation } from "@/components/MobileBottomNavigation";
 

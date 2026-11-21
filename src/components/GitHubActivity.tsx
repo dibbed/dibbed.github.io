@@ -2,8 +2,8 @@ import { useEffect, useState, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 import { RefreshCw } from "lucide-react";
 import { SpotlightCard } from "@/components/SpotlightCard";
-import { useLanguage } from "@/i18n/LanguageContext";
-import { useLightweightMode } from "@/hooks/use-lightweight-mode";
+import { useLanguage } from "@/i18n/use-language";
+import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import { translations, type Lang } from "@/i18n/translations";
 
 interface GitHubEvent {

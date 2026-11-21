@@ -1,19 +1,8 @@
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { LightweightModeContext } from "./lightweight-mode-context";
 
 const STORAGE_KEY = "portfolio-lightweight";
 
-interface LightweightModeContextType {
-  /** User explicitly enabled lightweight mode. */
-  manualLightweight: boolean;
-  /** True if either user enabled lightweight mode or OS prefers reduced motion. */
-  isLightweight: boolean;
-  /** OS prefers-reduced-motion setting. */
-  prefersReducedMotion: boolean;
-  toggleLightweight: () => void;
-  setManualLightweight: (value: boolean) => void;
-}
-
-const LightweightModeContext = createContext<LightweightModeContextType | null>(null);
 
 function readSavedLightweight(): boolean {
   if (typeof window === "undefined") return false;
@@ -84,10 +73,4 @@ export function LightweightModeProvider({ children }: { children: ReactNode }) {
       {children}
     </LightweightModeContext.Provider>
   );
-}
-
-export function useLightweightMode() {
-  const ctx = useContext(LightweightModeContext);
-  if (!ctx) throw new Error("useLightweightMode must be used within LightweightModeProvider");
-  return ctx;
 }
