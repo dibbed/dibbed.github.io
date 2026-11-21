@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { skills } from "@/data/resume-data";
 import { Badge } from "@/components/ui/badge";
@@ -36,6 +36,24 @@ interface SkillsProps {
 
 export function Skills({ onFilterProjects }: SkillsProps) {
   const { t, lang } = useLanguage();
+  const radarRef = useRef<HTMLDivElement>(null);
+  const [radarVisible, setRadarVisible] = useState(false);
+
+  useEffect(() => {
+    const container = radarRef.current;
+    if (!container || typeof IntersectionObserver === "undefined") {
+      setRadarVisible(true);
+      return;
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setRadarVisible(true);
+        observer.disconnect();
+      }
+    }, { rootMargin: "280px 0px" });
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
   const { isLightweight } = useLightweightMode();
 
   return (
@@ -55,14 +73,19 @@ export function Skills({ onFilterProjects }: SkillsProps) {
           initial={isLightweight ? false : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
+          ref={radarRef}
           className="mx-auto mb-8 max-w-4xl"
         >
           <Suspense
             fallback={
-              <div className="h-[420px] w-full rounded-lg border border-border/50 bg-card/50 animate-pulse" />
+              <div className="h-[420px] w-full rounded-lg border border-border/50 bg-card/50 animate-pulse" role="status" aria-label={lang === "fa" ? "در حال بارگذاری نمودار" : "Loading focus chart"} />
             }
           >
-            <SkillRadarChart onFilterProjects={onFilterProjects} />
+            {radarVisible ? (
+              <SkillRadarChart onFilterProjects={onFilterProjects} />
+            ) : (
+              <div className="h-[420px] w-full rounded-lg border border-border/50 bg-card/50" aria-hidden="true" />
+            )}
           </Suspense>
         </motion.div>
 

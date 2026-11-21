@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import { profile, projects } from "@/data/resume-data";
@@ -33,12 +33,14 @@ import {
 } from "lucide-react";
 
 interface CommandPaletteProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   onOpenTerminal?: () => void;
   onSelectProject?: (projectName: string) => void;
 }
 
-export function CommandPalette({ onOpenTerminal, onSelectProject }: CommandPaletteProps) {
-  const [open, setOpen] = useState(false);
+export function CommandPalette({ open, onOpenChange, onOpenTerminal, onSelectProject }: CommandPaletteProps) {
+  const setOpen = onOpenChange;
   const { resolvedTheme, setTheme } = useTheme();
   const { t, toggleLang } = useLanguage();
   const { isLightweight, manualLightweight, prefersReducedMotion, toggleLightweight } = useLightweightMode();
@@ -51,17 +53,6 @@ export function CommandPalette({ onOpenTerminal, onSelectProject }: CommandPalet
     { label: t(translations.nav.education), href: "#education", icon: GraduationCap },
     { label: t(translations.nav.contact), href: "#contact", icon: Mail },
   ];
-
-  useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        setOpen((o) => !o);
-      }
-    };
-    document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
-  }, []);
 
   const scrollTo = (href: string) => {
     setOpen(false);

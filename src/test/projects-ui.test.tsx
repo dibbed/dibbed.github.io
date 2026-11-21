@@ -53,10 +53,10 @@ describe("project portfolio interactions", () => {
     expect(screen.getByRole("button", { name: /^Psychology\s+1$/ }).getAttribute("aria-pressed")).toBe("true");
   });
 
-  it("opens an inspectable engineering note with source links", () => {
+  it("opens an inspectable engineering note with source links", async () => {
     render(<ProjectHarness />);
     fireEvent.click(screen.getAllByRole("button", { name: /View Architecture/ })[0]);
-    const tab = screen.getByRole("tab", { name: /Engineering Notes/ });
+    const tab = await screen.findByRole("tab", { name: /Engineering Notes/ });
     fireEvent.mouseDown(tab, { button: 0, ctrlKey: false });
     fireEvent.click(tab);
     const source = screen.getByRole("link", { name: /Platform capability tests/ });
@@ -65,10 +65,10 @@ describe("project portfolio interactions", () => {
     );
   });
 
-  it("identifies sample shell output as illustrative rather than proven CI results", () => {
+  it("identifies sample shell output as illustrative rather than proven CI results", async () => {
     render(<ProjectHarness />);
     fireEvent.click(screen.getAllByRole("button", { name: /View Architecture/ })[0]);
-    const terminalTab = screen.getByRole("tab", { name: /Terminal Preview/ });
+    const terminalTab = await screen.findByRole("tab", { name: /Terminal Preview/ });
     fireEvent.mouseDown(terminalTab, { button: 0, ctrlKey: false });
     fireEvent.click(terminalTab);
     expect(screen.getByText(/not a recorded test run or live shell output/i)).toBeTruthy();

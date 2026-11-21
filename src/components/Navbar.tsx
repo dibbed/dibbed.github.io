@@ -2,19 +2,17 @@ import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { translations } from "@/i18n/translations";
 import { useLightweightMode } from "@/hooks/use-lightweight-mode";
-import { AnimatePresence, motion } from "framer-motion";
 import { getResumeUrl } from "@/lib/utils";
-import { Command, FileDown, Languages, Menu, Moon, Sun, Terminal, X, Zap } from "lucide-react";
+import { Command, FileDown, Languages, Moon, Sun, Terminal, Zap } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useState } from "react";
 
 interface NavbarProps {
+  onOpenCommandPalette: () => void;
   onOpenTerminal?: () => void;
 }
 
-export function Navbar({ onOpenTerminal }: NavbarProps) {
+export function Navbar({ onOpenTerminal, onOpenCommandPalette }: NavbarProps) {
   const { resolvedTheme, setTheme } = useTheme();
-  const [mobileOpen, setMobileOpen] = useState(false);
   const { t, toggleLang, lang } = useLanguage();
   const { isLightweight, manualLightweight, prefersReducedMotion, toggleLightweight } = useLightweightMode();
 
@@ -28,14 +26,11 @@ export function Navbar({ onOpenTerminal }: NavbarProps) {
   ];
 
   const scrollTo = (href: string) => {
-    setMobileOpen(false);
     const el = document.querySelector(href);
     el?.scrollIntoView({ behavior: isLightweight ? "auto" : "smooth" });
   };
 
-  const openCommandPalette = () => {
-    document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
-  };
+  const openCommandPalette = onOpenCommandPalette;
 
   const toggleColorTheme = () => {
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
@@ -157,7 +152,7 @@ export function Navbar({ onOpenTerminal }: NavbarProps) {
           </div>
         </div>
 
-        {/* Mobile toggle */}
+        {/* Compact mobile header; touch navigation lives at the bottom. */}
         <div className="flex items-center gap-1 lg:hidden">
           <Button
             variant="ghost"
@@ -186,82 +181,9 @@ export function Navbar({ onOpenTerminal }: NavbarProps) {
               aria-hidden="true"
             />
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-portfolio-menu"
-            aria-label={t(translations.nav.toggleMenuLabel)}
-          >
-            {mobileOpen ? (
-              <X className="h-5 w-5" aria-hidden="true" />
-            ) : (
-              <Menu className="h-5 w-5" aria-hidden="true" />
-            )}
-          </Button>
         </div>
       </div>
 
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            id="mobile-portfolio-menu"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-border/30 bg-background/90 backdrop-blur-xl lg:hidden"
-          >
-            <div className="flex flex-col gap-2 px-4 py-4">
-              {navLinks.map((l) => (
-                <button
-                  type="button"
-                  key={l.href}
-                  onClick={() => scrollTo(l.href)}
-                  className="py-2 text-left font-mono text-sm text-muted-foreground transition-colors hover:text-primary rtl:text-right"
-                >
-                  {l.label}
-                </button>
-              ))}
-              <div className="mt-2 flex flex-wrap items-center gap-3 border-t border-border/40 pt-3">
-                <a
-                  href={getResumeUrl()}
-                  download
-                  className="inline-flex items-center gap-2 py-1 font-mono text-sm text-muted-foreground transition-colors hover:text-primary"
-                >
-                  <FileDown className="h-4 w-4" aria-hidden="true" /> {t(translations.hero.downloadCv)}
-                </a>
-                {onOpenTerminal && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMobileOpen(false);
-                      onOpenTerminal();
-                    }}
-                    className="inline-flex items-center gap-2 py-1 font-mono text-sm text-muted-foreground transition-colors hover:text-primary"
-                  >
-                    <Terminal className="h-4 w-4" aria-hidden="true" /> {t(translations.nav.terminalShort)}
-                  </button>
-                )}
-                <button
-                  type="button"
-                  onClick={() => {
-                    toggleLightweight();
-                    setMobileOpen(false);
-                  }}
-                  disabled={prefersReducedMotion}
-                  className={`inline-flex items-center gap-2 py-1 font-mono text-sm transition-colors hover:text-primary ${
-                    isLightweight ? "text-primary font-semibold" : "text-muted-foreground"
-                  }`}
-                >
-                  <Zap className="h-4 w-4" aria-hidden="true" /> {t(translations.nav.lightweightShort)}
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </nav>
   );
 }

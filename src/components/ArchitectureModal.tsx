@@ -14,14 +14,15 @@ import { translations } from "@/i18n/translations";
 import type { ArchitectureData, ProjectCaseStudy, TerminalPreviewData } from "@/data/resume-data";
 
 interface Props {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   data: ArchitectureData;
   projectName: string;
   terminalPreview?: TerminalPreviewData;
   caseStudy?: ProjectCaseStudy;
 }
 
-export function ArchitectureModal({ data, projectName, terminalPreview, caseStudy }: Props) {
-  const [open, setOpen] = useState(false);
+export function ArchitectureModal({ open, onOpenChange, data, projectName, terminalPreview, caseStudy }: Props) {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(
     data.nodes?.[0]?.id ?? null
   );
@@ -29,16 +30,7 @@ export function ArchitectureModal({ data, projectName, terminalPreview, caseStud
   const selectedNode = data.nodes?.find((node) => node.id === selectedNodeId) ?? data.nodes?.[0];
 
   return (
-    <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="mt-2 font-mono text-[11px] font-medium text-primary underline underline-offset-2 transition-colors hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-      >
-        {t(translations.architecture.viewArchitecture)}
-      </button>
-
-      <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-h-[88vh] w-[calc(100vw-1.5rem)] max-w-3xl overflow-y-auto border-border/60 bg-card/95 backdrop-blur-xl">
           <DialogHeader>
             <DialogTitle className="font-mono text-sm">
@@ -186,7 +178,6 @@ export function ArchitectureModal({ data, projectName, terminalPreview, caseStud
             )}
           </Tabs>
         </DialogContent>
-      </Dialog>
-    </>
+    </Dialog>
   );
 }

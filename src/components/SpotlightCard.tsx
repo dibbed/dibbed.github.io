@@ -3,11 +3,12 @@ import { cn } from "@/lib/utils";
 import { useLightweightMode } from "@/hooks/use-lightweight-mode";
 
 interface SpotlightCardProps {
+  id?: string;
   children: ReactNode;
   className?: string;
 }
 
-export function SpotlightCard({ children, className }: SpotlightCardProps) {
+export function SpotlightCard({ id, children, className }: SpotlightCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const { isLightweight } = useLightweightMode();
 
@@ -20,6 +21,7 @@ export function SpotlightCard({ children, className }: SpotlightCardProps) {
 
   return (
     <div
+      id={id}
       ref={ref}
       onMouseMove={handleMouseMove}
       className={cn(
