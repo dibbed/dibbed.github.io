@@ -13,6 +13,7 @@ import { SpotlightCard } from "@/components/SpotlightCard";
 import { projects } from "@/data/resume-data";
 import { useLanguage } from "@/i18n/use-language";
 import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
+import { navigateToPortfolioSection } from "@/lib/portfolio-navigation";
 
 // Areas are explicit tags on featured projects, not subjective skill percentages.
 const areas = [
@@ -57,7 +58,7 @@ export function SkillRadarChart({ onFilterProjects }: SkillRadarChartProps) {
     if (onFilterProjects) {
       onFilterProjects(selected);
     }
-    document.querySelector("#projects")?.scrollIntoView({ behavior: isLightweight ? "auto" : "smooth" });
+    navigateToPortfolioSection("projects", isLightweight ? "auto" : "smooth");
   };
 
   return (

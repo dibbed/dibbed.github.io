@@ -100,7 +100,7 @@ function AccessibleCard({ study, index }: { study: CaseStudy; index: number }) {
           </div>
           <span className="font-mono text-xs text-primary" dir="ltr">0{index + 1} / 03</span>
         </div>
-        <h3 className="relative mt-5 font-mono text-xl font-bold" dir="ltr">{study.projectName}</h3>
+        <h3 className="relative mt-5 break-words font-mono text-xl font-bold [overflow-wrap:anywhere]" dir="ltr">{study.projectName}</h3>
         <p className="relative mt-3 text-sm font-medium leading-7">{study.headline[lang]}</p>
         <p className="relative mt-2 line-clamp-3 text-sm leading-7 text-muted-foreground">{study.deck[lang]}</p>
         <Link to={caseStudyUrl(study.slug)} className="relative mt-5 inline-flex min-h-11 w-full items-center justify-between rounded-lg bg-primary/10 px-4 font-mono text-xs font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
@@ -208,7 +208,7 @@ export function CinematicShowcase() {
           </p>
           <h2 className="mt-3 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">{stageHeading}</h2>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-muted-foreground">{stageSubline}</p>
-          <div className="mt-8 grid gap-4 lg:grid-cols-3">
+          <div className="mt-8 grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-3">
             {caseStudies.map((study, index) => <AccessibleCard key={study.slug} study={study} index={index} />)}
           </div>
         </div>

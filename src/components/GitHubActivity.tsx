@@ -155,11 +155,12 @@ export function GitHubActivity() {
 
   return (
     <motion.div
+      id="github-activity"
+      className="scroll-mt-24 mx-auto mt-16 max-w-2xl px-4"
       initial={isLightweight ? false : { opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.45 }}
-      className="mx-auto mt-16 max-w-2xl px-4"
     >
       <SpotlightCard className="p-4">
         <div className="mb-3 flex items-center justify-between gap-2">
@@ -195,7 +196,7 @@ export function GitHubActivity() {
             href="https://github.com/dibbed"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-mono text-[11px] text-muted-foreground underline underline-offset-2 hover:text-primary"
+            className="inline-flex min-h-11 items-center rounded font-mono text-xs text-muted-foreground underline underline-offset-2 hover:text-primary"
           >
             {t(translations.activity.unavailable)}
           </a>
@@ -211,7 +212,7 @@ export function GitHubActivity() {
                   href={event.repoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 font-medium text-primary hover:underline"
+                  className="inline-flex min-h-11 shrink-0 items-center rounded px-1 font-medium text-primary hover:underline"
                 >
                   {event.repo}
                 </a>

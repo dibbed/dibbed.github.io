@@ -17,6 +17,7 @@ import { translations } from "@/i18n/translations";
 import { projectAnchor } from "@/lib/project-links";
 import { projects } from "@/data/resume-data";
 import { shouldSkipIntro } from "@/lib/mobile-ux";
+import { navigateToPortfolioSection } from "@/lib/portfolio-navigation";
 
 // Command UIs and their dependencies are loaded only on first use.
 const CommandPalette = lazy(() => import("@/components/CommandPalette").then((m) => ({ default: m.CommandPalette })));
@@ -77,16 +78,22 @@ const Index = () => {
   }, [isLightweight, booted, handleBootComplete]);
 
   useEffect(() => {
-    if (!booted || !window.location.hash.startsWith("#")) return;
-    const anchor = decodeURIComponent(window.location.hash.slice(1));
-    const sections = ["hero", "for-teams", "projects", "skills", "experience", "education", "contact"];
-    const sharedProject = projects.some((project) => projectAnchor(project.name) === anchor);
-    if (!sections.includes(anchor) && !sharedProject) return;
-    // Handle both direct project links and React Router back-links to #projects.
-    const frame = window.requestAnimationFrame(() =>
-      document.getElementById(anchor)?.scrollIntoView({ behavior: "auto", block: "start" })
-    );
-    return () => window.cancelAnimationFrame(frame);
+    if (!booted) return;
+    const scrollToHash = () => {
+      if (!window.location.hash.startsWith("#")) return;
+      const anchor = decodeURIComponent(window.location.hash.slice(1));
+      const sections = ["hero", "for-teams", "projects", "skills", "experience", "github-activity", "education", "contact"];
+      const sharedProject = projects.some((project) => projectAnchor(project.name) === anchor);
+      if (!sections.includes(anchor) && !sharedProject) return;
+      navigateToPortfolioSection(anchor, "auto");
+    };
+    // Direct links must hydrate all preceding chunks before final positioning.
+    const frame = window.requestAnimationFrame(scrollToHash);
+    window.addEventListener("hashchange", scrollToHash);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("hashchange", scrollToHash);
+    };
   }, [booted]);
 
   useEffect(() => {
@@ -122,9 +129,7 @@ const Index = () => {
     (projectName: string) => {
       setProjectFilter("All");
       setProjectSearch(projectName);
-      document
-        .querySelector("#projects")
-        ?.scrollIntoView({ behavior: isLightweight ? "auto" : "smooth" });
+      navigateToPortfolioSection("projects", isLightweight ? "auto" : "smooth");
     },
     [isLightweight]
   );

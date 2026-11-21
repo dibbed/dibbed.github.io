@@ -3,6 +3,7 @@ import { useLanguage } from "@/i18n/use-language";
 import { translations } from "@/i18n/translations";
 import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import { getResumeUrl } from "@/lib/utils";
+import { navigateToPortfolioSection } from "@/lib/portfolio-navigation";
 import { Command, FileDown, Languages, Moon, Search, Sun, Terminal, Zap } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -26,8 +27,7 @@ export function Navbar({ onOpenTerminal, onOpenCommandPalette }: NavbarProps) {
   ];
 
   const scrollTo = (href: string) => {
-    const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: isLightweight ? "auto" : "smooth" });
+    navigateToPortfolioSection(href.slice(1), isLightweight ? "auto" : "smooth");
   };
 
   const openCommandPalette = onOpenCommandPalette;
@@ -45,10 +45,10 @@ export function Navbar({ onOpenTerminal, onOpenCommandPalette }: NavbarProps) {
         <button
           type="button"
           onClick={() => scrollTo("#hero")}
-          className="font-mono text-lg font-bold tracking-wider text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="inline-flex min-h-11 min-w-0 flex-1 items-center rounded-md px-1 font-mono text-lg lg:flex-none font-bold tracking-wider text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           dir="ltr"
         >
-          AliKhalili<span className="text-primary">.</span>
+          <span className="min-w-0 truncate">AliKhalili<span className="text-primary">.</span></span>
         </button>
 
         {/* Desktop */}
@@ -153,9 +153,9 @@ export function Navbar({ onOpenTerminal, onOpenCommandPalette }: NavbarProps) {
         </div>
 
         {/* Compact mobile header; touch navigation lives at the bottom. */}
-        <div className="flex items-center gap-1 lg:hidden">
+        <div className="flex shrink-0 items-center gap-1 lg:hidden">
           <Button variant="ghost" size="icon" onClick={openCommandPalette}
-            aria-label={t(translations.nav.search)} className="h-11 w-11">
+            aria-label={t(translations.nav.search)} className="h-[44px] w-[44px]">
             <Search className="h-5 w-5" aria-hidden="true" />
           </Button>
           <Button
@@ -163,7 +163,7 @@ export function Navbar({ onOpenTerminal, onOpenCommandPalette }: NavbarProps) {
             size="icon"
             onClick={toggleLang}
             aria-label={t(translations.nav.switchLangLabel)}
-            className="relative h-11 w-11"
+            className="relative h-[44px] w-[44px]"
           >
             <Languages className="h-5 w-5" aria-hidden="true" />
             <span className="absolute -bottom-0.5 -right-0.5 font-mono text-[8px] font-bold text-primary">
@@ -175,7 +175,7 @@ export function Navbar({ onOpenTerminal, onOpenCommandPalette }: NavbarProps) {
             size="icon"
             onClick={toggleColorTheme}
             aria-label={t(translations.nav.toggleThemeLabel)}
-            className="h-11 w-11"
+            className="h-[44px] w-[44px]"
           >
             <Sun
               className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"

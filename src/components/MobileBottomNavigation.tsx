@@ -10,6 +10,7 @@ import { useLanguage } from "@/i18n/use-language";
 import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import { translations } from "@/i18n/translations";
 import { getResumeUrl } from "@/lib/utils";
+import { navigateToPortfolioSection } from "@/lib/portfolio-navigation";
 
 type SectionId = "hero" | "skills" | "experience" | "projects" | "education" | "contact";
 const SECTION_IDS: SectionId[] = ["hero", "projects", "skills", "experience", "education", "contact"];
@@ -32,7 +33,10 @@ export function MobileBottomNavigation({ onOpenTerminal, onOpenSearch }: MobileB
     let pending = 0;
     const updateActive = () => {
       pending = 0;
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 30) {
+      const remaining = document.documentElement.scrollHeight - (window.innerHeight + window.scrollY);
+      const contactTop = document.getElementById("contact")?.getBoundingClientRect().top ?? Infinity;
+      if (remaining <= Math.max(100, window.innerHeight * 0.16) &&
+          contactTop <= Math.min(window.innerHeight * 0.55, 500)) {
         setActive("contact");
         return;
       }
@@ -87,10 +91,7 @@ export function MobileBottomNavigation({ onOpenTerminal, onOpenSearch }: MobileB
   const goTo = useCallback((id: SectionId) => {
     setMoreOpen(false);
     setActive(id);
-    document.getElementById(id)?.scrollIntoView({
-      behavior: isLightweight ? "instant" : "smooth",
-      block: "start",
-    });
+    navigateToPortfolioSection(id, isLightweight ? "auto" : "smooth");
   }, [isLightweight]);
 
   const doAction = (handler: () => void) => {

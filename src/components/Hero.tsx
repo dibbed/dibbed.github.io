@@ -8,6 +8,7 @@ import { CountUp } from "@/components/CountUp";
 import { useLanguage } from "@/i18n/use-language";
 import { translations } from "@/i18n/translations";
 import { getResumeUrl } from "@/lib/utils";
+import { navigateToPortfolioSection } from "@/lib/portfolio-navigation";
 import { useLightweightMode } from "@/hooks/use-lightweight-mode-context";
 import { useCinematicMotion } from "@/hooks/use-cinematic-motion";
 
@@ -110,7 +111,11 @@ export function Hero() {
         {/* Employer-first: links to real evidence, code and contact. */}
         <motion.div variants={fadeUp} className="order-1 grid grid-cols-2 items-center justify-center gap-3 lg:order-2 lg:flex lg:flex-wrap" dir="ltr">
           <Button asChild className="min-h-11 gap-2 font-mono text-xs sm:text-sm">
-            <a href="#projects">
+            <a href="#projects" onClick={(event) => {
+              event.preventDefault();
+              window.history.pushState({}, "", "#projects");
+              navigateToPortfolioSection("projects", "auto");
+            }}>
               <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
               {t(translations.hero.exploreWork)}
             </a>
