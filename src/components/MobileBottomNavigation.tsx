@@ -190,7 +190,7 @@ export function MobileBottomNavigation({ onOpenTerminal, onOpenSearch }: MobileB
               <Terminal aria-hidden="true" className="h-[18px] w-[18px] shrink-0 text-primary" />
               {t(translations.nav.terminalShort)}
             </button>
-            <a href={getResumeUrl()} download onClick={() => setMoreOpen(false)} className={actionClass}>
+            <a href={getResumeUrl()} download="Ali_Khalili_CV.pdf" onClick={() => setMoreOpen(false)} className={actionClass}>
               <FileDown aria-hidden="true" className="h-[18px] w-[18px] shrink-0 text-primary" />
               {t(translations.hero.downloadCv)}
             </a>

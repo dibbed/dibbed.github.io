@@ -90,7 +90,7 @@ function CaseStudyContent({ item }: { item: CaseStudy }) {
             <span>{labels.back}</span>
           </Link>
           <div className="flex items-center gap-1">
-            <a href={getResumeUrl()} download className="hidden min-h-10 items-center gap-2 rounded-lg px-3 font-mono text-xs text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:inline-flex">
+            <a href={getResumeUrl()} download="Ali_Khalili_CV.pdf" className="hidden min-h-10 items-center gap-2 rounded-lg px-3 font-mono text-xs text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:inline-flex">
               <FileDown className="h-4 w-4" aria-hidden="true" />{labels.cv}
             </a>
             <button type="button" onClick={toggleLang} aria-label={isFa ? "Switch to English" : "تغییر زبان به فارسی"} className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-muted-foreground hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
